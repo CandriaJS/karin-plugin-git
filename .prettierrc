@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "files": [
+        "**/*.{ts,mts,cts,tsx}"
+      ],
+      "options": {
+        "plugins": [
+          "@prettier/plugin-oxc"
+        ],
+        "parser": "oxc-ts"
+      }
+    }
+  ],
+  "singleQuote": true
+}
