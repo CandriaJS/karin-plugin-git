@@ -1,5 +1,6 @@
 import { createClient } from './index';
 
+let platform = "github"
 export async function AddRepo(
   botId: string,
   groupId: string,
@@ -8,15 +9,15 @@ export async function AddRepo(
 ) {
   let client = await createClient();
   await client.run(
-    'INSERT INTO github (botId, groupId, owner, repo) VALUES (?, ?, ?, ?)',
-    [botId, groupId, owner, repo],
+    'INSERT INTO push (platform, botId, groupId, owner, repo) VALUES (?, ?, ?, ?, ?)',
+    [platform,botId, groupId, owner, repo],
   );
 }
 
 export async function GetAll(): Promise<SubscribedRepo[]> {
   let client = await createClient();
   const result = await new Promise<SubscribedRepo[]>((resolve, reject) => {
-    client.all('SELECT * FROM github', (err, rows) => {
+    client.all('SELECT * FROM push', (err, rows) => {
       if (err) reject(err);
       else resolve(rows as SubscribedRepo[]);
     });
@@ -28,8 +29,8 @@ export async function GetRepo(botId: string, groupId: string, owner: string, rep
   let client = await createClient();
   const result = await new Promise<SubscribedRepo | null>((resolve, reject) => {
     client.get(
-      'SELECT * FROM github WHERE botId = ? AND groupId = ? AND owner = ? AND repo = ?',
-      [botId, groupId, owner, repo],
+      'SELECT * FROM push WHERE platform = ? AND botId = ? AND groupId = ? AND owner = ? AND repo = ?',
+      [platform,botId, groupId, owner, repo],
       (err, row) => {
         if (err) reject(err);
         else if (row && Object.keys(row).length > 0) resolve(row as unknown as SubscribedRepo);
@@ -44,8 +45,8 @@ export async function GetGroup(groupId: string): Promise<SubscribedRepo[]> {
   let client = await createClient();
   const repos = await new Promise<SubscribedRepo[]>((resolve, reject) => {
     client.all(
-      'SELECT * FROM github WHERE groupId = ?',
-      [groupId],
+      'SELECT * FROM push WHERE platform = ? AND groupId = ?',
+      [platform, groupId],
       (err, rows) => {
         if (err) reject(err);
         else resolve(rows as SubscribedRepo[]);
@@ -59,8 +60,8 @@ export async function GetBot(botId: string): Promise<SubscribedRepo[]> {
   let client = await createClient();
   const repos = await new Promise<SubscribedRepo[]>((resolve, reject) => {
     client.all(
-      'SELECT * FROM github WHERE botId = ?',
-      [botId],
+      'SELECT * FROM push WHERE platform = ? AND botId = ?',
+      [platform, botId],
       (err, rows) => {
         if (err) reject(err);
         else resolve(rows as SubscribedRepo[]);
@@ -79,8 +80,8 @@ export async function UpdateCommitSha(
 ) { 
   let client = await createClient();
   await client.run(
-    'UPDATE github SET commitSha = ? WHERE botId = ? AND groupId = ? AND owner = ? AND repo = ?',
-    [commitSha, botId, groupId, owner, repo],
+    'UPDATE push SET commitSha = ? WHERE platform = ? AND botId = ? AND groupId = ? AND owner = ? AND repo = ?',
+    [platform, commitSha, botId, groupId, owner, repo],
   )
 }
 export async function UpdateDefaultBranch(
@@ -92,8 +93,8 @@ export async function UpdateDefaultBranch(
 ) { 
   let client = await createClient();
   await client.run(
-    'UPDATE github SET defaultBranch = ? WHERE botId = ? AND groupId = ? AND owner = ? AND repo = ?',
-    [defaultBranch, botId, groupId, owner, repo],
+    'UPDATE push SET defaultBranch = ? WHERE platform = ? AND botId = ? AND groupId = ? AND owner = ? AND repo = ?',
+    [platform, defaultBranch, botId, groupId, owner, repo],
   )
 }
 
@@ -106,8 +107,8 @@ export async function GetRepoDefaultBranch(
   let client = await createClient();
   const result = await new Promise<string | null>((resolve, reject) => {
     client.get(
-      'SELECT defaultBranch FROM github WHERE botId = ? AND groupId = ? AND owner = ? AND repo = ?',
-      [botId, groupId, owner, repo],
+      'SELECT defaultBranch FROM push WHERE platform = ? AND botId = ? AND groupId = ? AND owner = ? AND repo = ?',
+      [platform, botId, groupId, owner, repo],
       (err, row) => {
         if (err) reject(err);
         else resolve(row as string);

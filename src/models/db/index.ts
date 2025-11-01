@@ -16,8 +16,9 @@ export const createClient = async () => {
 export const InitDb = async () => {
   const client = await createClient();
   client.exec(`
-    CREATE TABLE IF NOT EXISTS github (
+    CREATE TABLE IF NOT EXISTS push (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      platform TEXT NOT NULL,
       botId TEXT NOT NULL,
       groupId TEXT NOT NULL,
       owner TEXT NOT NULL,
