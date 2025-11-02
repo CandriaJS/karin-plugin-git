@@ -20,6 +20,6 @@ export const AddRepo = karin.command(
     name: 'karin-plugin-git:addRepo',
     priority: 500,
     event: 'message.group',
-    permission: 'all',
+    permission: 'master',
   },
 );
