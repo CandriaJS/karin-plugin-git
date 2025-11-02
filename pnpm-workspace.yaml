@@ -3,3 +3,5 @@ onlyBuiltDependencies:
   - bufferutil
   - esbuild
   - msw
+packages:
+  - 'packages/*'

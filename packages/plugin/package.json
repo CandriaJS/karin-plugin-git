@@ -1,0 +1,86 @@
+{
+  "name": "@candriajs/karin-plugin-git",
+  "version": "1.0.0",
+  "description": "一个karin的git平台仓库订阅推送",
+  "keywords": [
+    "karin-plugin",
+    "karin-plugin-git"
+  ],
+  "homepage": "https://github.com/CandriaJS/karin-plugin-git",
+  "bugs": {
+    "url": "https://github.com/CandriaJS/karin-plugin-git/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CandriaJS/karin-plugin-git.git"
+  },
+  "license": "GNU General Public License v3.0",
+  "author": "CandriaJS",
+  "type": "module",
+  "main": "lib/index.js",
+  "files": [
+    "config/",
+    "lib/",
+    "resources/",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "app": "node --import tsx src/app.ts",
+    "build": "tsc --noEmit && tsdown",
+    "dev": "cross-env EBV_FILE=\"development.env\" node --import tsx src/app.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "pub": "npm publish --access public",
+    "sort": "sort-package-json",
+    "watch": "cross-env EBV_FILE=\"development.env\" tsx watch --include \"src/**/*.ts\" src/app.ts"
+  },
+  "dependencies": {
+    "canvas": "npm:@napi-rs/canvas@^0.1.81",
+    "dayjs": "^1.11.19",
+    "es-toolkit": "^1.41.0",
+    "markdown-it": "^14.1.0",
+    "nipaw": "npm:@puniyu/nipaw@^1.5.0"
+  },
+  "devDependencies": {
+    "@karinjs/plugin-puppeteer": "^1.0.21",
+    "@prettier/plugin-oxc": "^0.0.4",
+    "@types/express": "^5.0.5",
+    "@types/lodash": "^4.17.16",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^22.15.3",
+    "cross-env": "^7.0.3",
+    "node-karin": "^1.12.2",
+    "oxlint": "^1.23.0",
+    "prettier": "^3.6.2",
+    "tsc-alias": "1.8.13",
+    "tsdown": "^0.15.12",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  },
+  "karin": {
+    "main": "src/index.ts",
+    "web": "./lib/web.config.js",
+    "ts-web": "./src/web.config.ts",
+    "apps": [
+      "lib/apps"
+    ],
+    "ts-apps": [
+      "src/apps"
+    ],
+    "static": [
+      "resources"
+    ],
+    "files": [
+      "config",
+      "data",
+      "resources"
+    ],
+    "engines": {
+      "karin": ">=1.9.1"
+    }
+  },
+  "packageManager": "pnpm@10.14.0"
+}
