@@ -1,5 +1,11 @@
 import { db } from '@/models';
-import karin, { getBot, logger, contactGroup } from 'node-karin';
+import karin, {
+  getBot,
+  logger,
+  contactGroup,
+  ImageElement,
+  common,
+} from 'node-karin';
 import { GithubClient } from 'nipaw';
 import { Config, Render } from '@/common';
 import { isEmpty } from 'es-toolkit/compat';
@@ -16,59 +22,53 @@ export const github = karin.task(
     try {
       const client = new GithubClient();
       client.setToken(token);
-      const all = await db.github.GetAll();
+      const all = await db.push.GetAll();
 
-      const commits = new Map<string, Array<PushCommitInfo>>();
+      if (isEmpty(all)) return;
 
-      for (const repo of all) {
-        let commitInfo = await client.getCommitInfo(
-          repo.owner,
-          repo.repo,
+      const repoInfos = all.filter((repo) => repo.platform === Platform.GitHub);
+
+      for (const repo of repoInfos) {
+        const pushRepoInfo = await db.repo.GetRepo(repo.repoId);
+        if (!pushRepoInfo) continue;
+        const commitInfo = await client.getCommitInfo(
+          pushRepoInfo.owner,
+          pushRepoInfo.repo,
           repo.branch,
         );
-
-        const latestSha = commitInfo.sha;
-
-
-        if (!repo.commitSha || repo.commitSha !== latestSha) {
-          const key = `${repo.botId}-${repo.groupId}`;
-          if (!commits.has(key)) commits.set(key, []);
-
-          const messageParts = commitInfo.commit.message.split('\n');
-
-          const repoCommitInfo: PushCommitInfo = {
-            ...commitInfo,
-            owner: repo.owner,
-            repo: repo.repo,
-            botId: repo.botId,
-            groupId: repo.groupId,
-            title: messageParts[0],
-            body: messageParts.slice(1).join('\n'),
-            commitDate: formatDate(commitInfo.commit.author.date),
-          };
-          commits.get(key)?.push(repoCommitInfo);;
-
-          await db.github.UpdateCommitSha(
-            repo.botId,
-            repo.groupId,
-            repo.owner,
-            repo.repo,
-            repo.branch,
-            latestSha
-          );
-        }
-      }
-
-      for (const [groupKey, commitInfos] of commits) {
-        const [botId, groupId] = groupKey.split('-');
-        const contact = contactGroup(groupId);
-        const bot = getBot(botId);
-        const image = await Render.render('commit/index', {
-          platform: Platform.GitHub,
-          commits: commitInfos,
+        if (commitInfo.sha === repo.commitSha) continue;
+        const messageParts = commitInfo.commit.message.split('\n');
+        const PushInfo: PushCommitInfo = {
+          ...commitInfo,
+          owner: pushRepoInfo.owner,
+          repo: pushRepoInfo.repo,
+          botId: pushRepoInfo.botId,
+          groupId: pushRepoInfo.groupId,
+          title: messageParts[0],
+          body: messageParts.slice(1).join('\n'),
+          commitDate: formatDate(commitInfo.commit.committer.date),
+        };
+        let image: ImageElement[] = [];
+        const img = await Render.render('commit/index', {
+          commit: PushInfo,
         });
-
-        await bot?.sendMsg(contact, image);
+        image.push(img);
+        const bot = getBot(pushRepoInfo.botId);
+        const contact = await contactGroup(pushRepoInfo.groupId);
+        if (image.length > 1) {
+          const res = await common.makeForward(
+            image,
+            pushRepoInfo.botId,
+            bot?.account.name,
+          );
+          await bot?.sendForwardMsg(contact, res, {
+            source: '仓库推送合集',
+            summary: `查看${res.length}张仓库推送消息`,
+            prompt: 'Gitub仓库推送结果',
+            news: [{ text: '点击查看推送结果' }],
+          });
+        }else await bot?.sendMsg(contact, image);
+        await db.push.UpdateCommitSha(Platform.GitHub, repo.repoId, repo.branch, commitInfo.sha)
       }
     } catch (e) {
       logger.error(e);

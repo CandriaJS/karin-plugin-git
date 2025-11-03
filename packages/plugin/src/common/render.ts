@@ -1,7 +1,7 @@
 import { Role } from '@/types/help';
 import path from 'node:path';
 
-import karin, { ImageElement, segment } from 'node-karin';
+import karin, { segment } from 'node-karin';
 
 import { Version } from '@/root';
 import { createCanvas, Image, SKRSContext2D } from 'canvas';
@@ -52,15 +52,10 @@ const Render = {
         timeout: 60000,
       },
     });
-    const ret: ImageElement[] = [];
-    for (const image of img) {
-      const base64Image = image.startsWith('base64://')
-        ? image
-        : `base64://${image}`;
-      ret.push(segment.image(base64Image));
-    }
 
-    return ret;
+    return segment.image(
+      `${img.includes('base64://') ? img : `base64://${img}`}`,
+    );
   },
 
   async help(role: Role) {

@@ -12,24 +12,50 @@ export const createClient = async () => {
   return dbClient;
 };
 
-/// 初始化数据库
+
+
+/**
+ * 初始化数据库
+ * TOTO: 添加bot和group表，数据库再一度重构
+ */
 export const InitDb = async () => {
   const client = await createClient();
+
+  // 创建 repo 表
+  client.exec(`
+    CREATE TABLE IF NOT EXISTS repo (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      owner TEXT NOT NULL,
+      repo TEXT NOT NULL,
+      botId TEXT NOT NULL,
+      groupId TEXT NOT NULL,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(owner, repo, botId, groupId)
+    )
+  `);
+
+  // 创建 push 表
   client.exec(`
     CREATE TABLE IF NOT EXISTS push (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      repoId INTEGER NOT NULL,
       platform TEXT NOT NULL,
-      botId TEXT NOT NULL,
-      groupId TEXT NOT NULL,
-      owner TEXT NOT NULL,
-      repo TEXT NOT NULL,
       branch TEXT NOT NULL,
       commitSha TEXT,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(platform, botId, groupId, owner, repo, branch)
+      FOREIGN KEY (repoId) REFERENCES repo(id) ON DELETE CASCADE
     )
   `);
+
+  // 创建索引
+  client.exec(
+    `CREATE INDEX IF NOT EXISTS idx_repo_lookup ON repo(botId, groupId)`,
+  );
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_repo ON push(repoId)`);
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_platform ON push(platform)`);
 };
 
-export * as github from './github';
+export * as push from './push';
+export * as repo from './repo';
