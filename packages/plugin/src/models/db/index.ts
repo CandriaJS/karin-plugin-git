@@ -16,7 +16,6 @@ export const createClient = async () => {
 
 /**
  * 初始化数据库
- * TOTO: 添加bot和group表，数据库再一度重构
  */
 export const InitDb = async () => {
   const client = await createClient();

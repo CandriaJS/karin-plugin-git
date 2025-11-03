@@ -63,12 +63,12 @@ export async function GetRepo(...args: [number] | [string, string, string, strin
 export async function GetGroupRepo(groupId: string): Promise<RepoInfo[]> {
   let client = await createClient();
   const result = await new Promise<RepoInfo[]>((resolve, reject) => {
-    client.get(
+    client.all(
       'SELECT * FROM repo WHERE groupId = ?',
       [groupId],
-      (err, row) => {
+      (err, rows) => {
         if (err) reject(err);
-        else resolve(row as RepoInfo[]);
+        else resolve(rows as RepoInfo[]);
       },
     );
   });

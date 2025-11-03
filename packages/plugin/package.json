@@ -38,27 +38,17 @@
     "watch": "cross-env EBV_FILE=\"development.env\" tsx watch --include \"src/**/*.ts\" src/app.ts"
   },
   "dependencies": {
+    "@mdit/plugin-tasklist": "^0.22.2",
     "canvas": "npm:@napi-rs/canvas@^0.1.81",
     "dayjs": "^1.11.19",
     "es-toolkit": "^1.41.0",
     "markdown-it": "^14.1.0",
+    "markdown-it-emoji": "^3.0.0",
     "nipaw": "npm:@puniyu/nipaw@^1.5.0"
   },
   "devDependencies": {
-    "@karinjs/plugin-puppeteer": "^1.0.21",
-    "@prettier/plugin-oxc": "^0.0.4",
-    "@types/express": "^5.0.5",
-    "@types/lodash": "^4.17.16",
     "@types/markdown-it": "^14.1.2",
-    "@types/node": "^22.15.3",
-    "cross-env": "^7.0.3",
-    "node-karin": "^1.12.2",
-    "oxlint": "^1.23.0",
-    "prettier": "^3.6.2",
-    "tsc-alias": "1.8.13",
-    "tsdown": "^0.15.12",
-    "tsx": "^4.19.4",
-    "typescript": "^5.8.3"
+    "@types/markdown-it-emoji": "^3.0.1"
   },
   "karin": {
     "main": "src/index.ts",

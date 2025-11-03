@@ -13,5 +13,5 @@ export default defineConfig({
   treeshake: true,              // 启用树摇优化
   platform: 'node',            // 指定为Node.js环境
   outDir: 'lib',               // 指定输出目录 
-  external: ['node-karin'],                 // 外部依赖, 不打包进输出文件中
+  external: [/^node-karin/],                 // 外部依赖, 不打包进输出文件中
 })

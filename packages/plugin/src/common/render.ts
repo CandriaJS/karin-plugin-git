@@ -1,11 +1,13 @@
 import { Role } from '@/types/help';
 import path from 'node:path';
-
+import { full as emoji } from 'markdown-it-emoji';
+import { tasklist } from '@mdit/plugin-tasklist';
 import karin, { segment } from 'node-karin';
 
 import { Version } from '@/root';
 import { createCanvas, Image, SKRSContext2D } from 'canvas';
 import { helpList } from './help';
+import MarkdownIt from 'markdown-it';
 
 /**
  * 渲染精度
@@ -58,6 +60,7 @@ const Render = {
     );
   },
 
+  // TODO: 重构，重构😡
   async help(role: Role) {
     const CARD_WIDTH = 450;
     const CARD_HEIGHT = 120;
@@ -250,3 +253,14 @@ function wrapText(
 }
 
 export { Render };
+
+export const render_markdown = async (markdown: string) => {
+  const md = new MarkdownIt({
+    html: true,
+    breaks: true,
+  });
+  md.use(emoji);
+  md.use(tasklist);
+  md.renderer.rules.bullet_list_open = () => '<ul style="list-style: none;">';
+  return Promise.resolve(md.render(markdown));
+};

@@ -1,3 +1,4 @@
+import { render_markdown } from '@/common/render';
 import { db } from '@/models';
 import karin, {
   getBot,
@@ -15,7 +16,7 @@ import { Platform } from '@/types';
 
 export const github = karin.task(
   'karin-plugin-git:github',
-  '*/10 * * * * *',
+  Config.github.cron || "0 */5 * * * *",
   async () => {
     const token = Config.github.token;
     if (isEmpty(token)) return logger.warn('未配置GitHub Token, 跳过任务');
@@ -44,8 +45,8 @@ export const github = karin.task(
           repo: pushRepoInfo.repo,
           botId: pushRepoInfo.botId,
           groupId: pushRepoInfo.groupId,
-          title: messageParts[0],
-          body: messageParts.slice(1).join('\n'),
+          title: await render_markdown(messageParts[0]),
+          body: await render_markdown(messageParts.slice(1).join('\n')),
           commitDate: formatDate(commitInfo.commit.committer.date),
         };
         let image: ImageElement[] = [];
