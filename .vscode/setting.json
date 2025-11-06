@@ -1,4 +1,4 @@
 {
-    "oxc.fmt.experimental": true,
-    "editor.defaultFormatter": "oxc.oxc-vscode"
-  }
+  "oxc.fmt.experimental": true,
+  "editor.defaultFormatter": "oxc.oxc-vscode"
+}

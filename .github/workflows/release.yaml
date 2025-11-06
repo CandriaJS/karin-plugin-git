@@ -29,7 +29,7 @@ jobs:
         run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          
+
       - name: 运行 release-please-action
         id: release-please
         uses: googleapis/release-please-action@v4
@@ -80,20 +80,19 @@ jobs:
           PACKAGE_SHORT_NAME=$(pnpm pkg get name | tr -d '"' | awk -F'/' '{print $2}')
           echo "PACKAGE_SHORT_NAME=$PACKAGE_SHORT_NAME" >> $GITHUB_OUTPUT
           echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_OUTPUT
-          
+
       - name: 构建
         run: |
           pnpm build
           pnpm pkg delete devDependencies
           mkdir -p ${{ runner.temp }}/temp/
           cp -r package.json CHANGELOG.md README.md LICENSE resources config lib ${{ runner.temp }}/temp/
-      
+
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.get-package-name.outputs.PACKAGE_SHORT_NAME }}
           path: ${{ runner.temp }}/temp/
-
 
   publish-to-github:
     runs-on: ubuntu-latest
@@ -134,4 +133,3 @@ jobs:
           registry: https://registry.npmjs.org/
           access: public
           provenance: true
-

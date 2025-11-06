@@ -1,10 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "unicorn",
-    "typescript",
-    "oxc"
-  ],
+  "plugins": ["unicorn", "typescript", "oxc"],
   "jsPlugins": null,
   "categories": {},
   "rules": {
@@ -110,9 +106,7 @@
     "unicorn/no-useless-length-check": "warn",
     "unicorn/no-useless-spread": "warn",
     "unicorn/prefer-set-size": "warn",
-    "unicorn/prefer-string-starts-ends-with": "warn",
-    "arrow-body-style": ["error", "as-needed"],
-    "curly": ["error", "multi-or-nest"]
+    "unicorn/prefer-string-starts-ends-with": "warn"
   },
   "settings": {
     "jsx-a11y": {

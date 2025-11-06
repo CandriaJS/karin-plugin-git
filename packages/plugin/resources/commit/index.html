@@ -41,10 +41,7 @@
                   alt="Gitcode Logo"
                 />
                 {{else}}
-                <img
-                  src="{{_res_path}}/icons/github.svg"
-                  alt="GitHub Logo"
-                />
+                <img src="{{_res_path}}/icons/github.svg" alt="GitHub Logo" />
                 {{/if}}
               </div>
               <div class="repo-info">
@@ -64,7 +61,10 @@
             <div class="avatar-info">
               {{if commit.commit.author.name === commit.commit.committer.name }}
               <div class="author-avatar">
-                <img src="{{ commit.commit.author.avatarUrl }}" alt="Author Avatar" />
+                <img
+                  src="{{ commit.commit.author.avatarUrl }}"
+                  alt="Author Avatar"
+                />
               </div>
               <span>由 {{ commit.commit.author.name }} 提交</span>
               <span class="time-info"> • {{ commit.commitDate }}</span>
@@ -86,8 +86,8 @@
                 </div>
               </div>
               <span
-                >由 {{ commit.commit.author.name }} 编写，并由 {{ commit.commit.committer.name
-                }} 提交</span
+                >由 {{ commit.commit.author.name }} 编写，并由 {{
+                commit.commit.committer.name }} 提交</span
               >
               <span class="time-info"> • {{ commit.commitDate }}</span>
               {{/if}}
@@ -96,10 +96,7 @@
             <div class="commit-message">
               <div class="commit-title">
                 <div class="commit-icon">
-                  <img
-                    src="{{_res_path}}/icons/commit.svg"
-                    alt="Commit Icon"
-                  />
+                  <img src="{{_res_path}}/icons/commit.svg" alt="Commit Icon" />
                 </div>
                 <span>{{@commit.title}}</span>
                 <div class="code-changes">

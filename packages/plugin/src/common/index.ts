@@ -1,2 +1,3 @@
-export * from '@/common/config'
-export * from '@/common/render'
+export * from './config'
+export * from './render'
+export * as Client from './client'

@@ -1,24 +1,22 @@
-import { Version } from '@/root';
-import { karinPathBase } from 'node-karin';
-import sqlite from 'node-karin/sqlite3';
+import { Version } from '@/root'
+import { karinPathBase } from 'node-karin'
+import sqlite from 'node-karin/sqlite3'
 
-let dbClient: sqlite.Database | null = null;
+let dbClient: sqlite.Database | null = null
 
 export const createClient = async () => {
   if (!dbClient) {
-    const dbPath = `${karinPathBase}/${Version.Plugin_Name}/data`;
-    dbClient = new sqlite.Database(`${dbPath}/data.db`);
+    const dbPath = `${karinPathBase}/${Version.Plugin_Name}/data`
+    dbClient = new sqlite.Database(`${dbPath}/data.db`)
   }
-  return dbClient;
-};
-
-
+  return dbClient
+}
 
 /**
  * 初始化数据库
  */
 export const InitDb = async () => {
-  const client = await createClient();
+  const client = await createClient()
 
   // 创建 repo 表
   client.exec(`
@@ -32,7 +30,7 @@ export const InitDb = async () => {
       updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       UNIQUE(owner, repo, botId, groupId)
     )
-  `);
+  `)
 
   // 创建 push 表
   client.exec(`
@@ -46,15 +44,15 @@ export const InitDb = async () => {
       updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (repoId) REFERENCES repo(id) ON DELETE CASCADE
     )
-  `);
+  `)
 
   // 创建索引
   client.exec(
     `CREATE INDEX IF NOT EXISTS idx_repo_lookup ON repo(botId, groupId)`,
-  );
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_repo ON push(repoId)`);
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_platform ON push(platform)`);
-};
+  )
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_repo ON push(repoId)`)
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_platform ON push(platform)`)
+}
 
-export * as push from './push';
-export * as repo from './repo';
+export * as push from './push'
+export * as repo from './repo'

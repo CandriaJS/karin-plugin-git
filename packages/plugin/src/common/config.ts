@@ -1,4 +1,4 @@
-import path from 'node:path';
+import path from 'node:path'
 
 import {
   copyConfigSync,
@@ -8,52 +8,52 @@ import {
   requireFileSync,
   watch,
   YamlEditor,
-} from 'node-karin';
+} from 'node-karin'
 
-import { Version } from '@/root';
-import type { ConfigType } from '@/types';
+import { Version } from '@/root'
+import type { ConfigType } from '@/types'
 
-type ConfigDirType = 'config' | 'defSet';
+type ConfigDirType = 'config' | 'defSet'
 
 class Cfg {
   /** 用户配置文件路径 */
-  private dirCfgPath: string;
+  private dirCfgPath: string
   /** 默认配置文件路径 */
-  private defCfgPath: string;
+  private defCfgPath: string
 
   constructor() {
-    this.dirCfgPath = `${karinPathBase}/${Version.Plugin_Name}/config/`;
-    this.defCfgPath = `${Version.Plugin_Path}/config/defSet/`;
+    this.dirCfgPath = `${karinPathBase}/${Version.Plugin_Name}/config/`
+    this.defCfgPath = `${Version.Plugin_Path}/config/defSet/`
   }
 
   /** 初始化配置 */
   initCfg() {
-    copyConfigSync(this.defCfgPath, this.dirCfgPath);
+    copyConfigSync(this.defCfgPath, this.dirCfgPath)
 
-    const files = filesByExt(this.dirCfgPath, '.yaml', 'name');
+    const files = filesByExt(this.dirCfgPath, '.yaml', 'name')
     for (const file of files) {
-      const configEditor = new YamlEditor(`${this.dirCfgPath}/${file}`);
-      const defConfigEditor = new YamlEditor(`${this.defCfgPath}/${file}`);
+      const configEditor = new YamlEditor(`${this.dirCfgPath}/${file}`)
+      const defConfigEditor = new YamlEditor(`${this.defCfgPath}/${file}`)
 
       const { differences, result } = this.mergeObjectsWithPriority(
         configEditor,
         defConfigEditor,
-      );
-      if (differences) result.save();
+      )
+      if (differences) result.save()
     }
 
     /**
      * @description 监听配置文件
      */
-    const list = filesByExt(this.dirCfgPath, '.yaml', 'abs');
+    const list = filesByExt(this.dirCfgPath, '.yaml', 'abs')
     list.forEach((file) =>
       watch(file, (_old, _now) => {
         // logger.info('旧数据:', old);
         // logger.info('新数据:', now);
       }),
-    );
+    )
 
-    return this;
+    return this
   }
 
   /**
@@ -62,24 +62,24 @@ class Cfg {
    * @returns 返回合并后的配置
    */
   getDefOrConfig(name: keyof ConfigType) {
-    const def = this.getYaml('defSet', name);
-    const config = this.getYaml('config', name);
-    return { ...def, ...config };
+    const def = this.getYaml('defSet', name)
+    const config = this.getYaml('config', name)
+    return { ...def, ...config }
   }
 
   /** 获取所有配置文件 */
   All(): ConfigType {
-    const allConfig: ConfigType = {} as ConfigType;
+    const allConfig: ConfigType = {} as ConfigType
 
-    const files = getFiles(this.defCfgPath, ['.yaml']);
+    const files = getFiles(this.defCfgPath, ['.yaml'])
 
     files.forEach((file) => {
-      const fileName = path.basename(file, '.yaml') as keyof ConfigType;
+      const fileName = path.basename(file, '.yaml') as keyof ConfigType
       allConfig[fileName] =
-        this.getDefOrConfig(fileName) ?? ({} as ConfigType[keyof ConfigType]);
-    });
+        this.getDefOrConfig(fileName) ?? ({} as ConfigType[keyof ConfigType])
+    })
 
-    return allConfig;
+    return allConfig
   }
 
   /**
@@ -92,9 +92,9 @@ class Cfg {
     const file =
       type === 'config'
         ? `${this.dirCfgPath}/${name}.yaml`
-        : `${this.defCfgPath}/${name}.yaml`;
+        : `${this.defCfgPath}/${name}.yaml`
 
-    return requireFileSync(file, { force: true });
+    return requireFileSync(file, { force: true })
   }
 
   /**
@@ -113,11 +113,11 @@ class Cfg {
     const filePath =
       type === 'config'
         ? `${this.dirCfgPath}/${name}.yaml`
-        : `${this.defCfgPath}/${name}.yaml`;
+        : `${this.defCfgPath}/${name}.yaml`
 
-    const editor = new YamlEditor(filePath);
-    editor.set(key, value);
-    editor.save();
+    const editor = new YamlEditor(filePath)
+    editor.set(key, value)
+    editor.save()
   }
 
   /**
@@ -127,39 +127,39 @@ class Cfg {
     userEditor: YamlEditor,
     defaultEditor: YamlEditor,
   ): { result: YamlEditor; differences: boolean } {
-    let differences = false;
+    let differences = false
 
     const mergeYamlNodes = (targetPath: string, sourceEditor: YamlEditor) => {
-      const sourceData = sourceEditor.get(targetPath);
-      const targetData = userEditor.get(targetPath);
+      const sourceData = sourceEditor.get(targetPath)
+      const targetData = userEditor.get(targetPath)
 
       if (typeof targetData === 'object' && typeof sourceData === 'object') {
         for (const key in sourceData) {
           if (!(key in targetData)) {
-            differences = true;
+            differences = true
             userEditor.set(
               `${targetPath ? `${targetPath}.` : ''}${key}`,
               sourceData[key],
-            );
+            )
           }
         }
       }
-    };
+    }
 
-    mergeYamlNodes('', defaultEditor);
+    mergeYamlNodes('', defaultEditor)
 
-    return { differences, result: userEditor };
+    return { differences, result: userEditor }
   }
 }
 
-type Config = ConfigType & Pick<Cfg, 'All' | 'Modify'>;
+type Config = ConfigType & Pick<Cfg, 'All' | 'Modify'>
 
 export const Config = new Proxy<Cfg & ConfigType>(
   Object.assign(new Cfg().initCfg(), {} as ConfigType),
   {
     get(target, prop: string) {
-      if (prop in target) return Reflect.get(target, prop);
-      return target.getDefOrConfig(prop as keyof ConfigType);
+      if (prop in target) return Reflect.get(target, prop)
+      return target.getDefOrConfig(prop as keyof ConfigType)
     },
   },
-);
+)

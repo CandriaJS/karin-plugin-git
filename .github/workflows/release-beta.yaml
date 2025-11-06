@@ -68,7 +68,6 @@ jobs:
           name: plugin
           path: ./plugin
 
-
       - name: 获取token
         uses: actions/create-github-app-token@v2
         id: app-token
@@ -85,7 +84,7 @@ jobs:
       - name: 发布 plugin
         run: |
           bun x pkg-pr-new publish './plugin' --json output.json --comment=off > plugin.txt 2>&1
-          
+
           echo "## 成功推送的Package包 :" >> $GITHUB_STEP_SUMMARY
           echo "包名: \`@candriajs/karin-plugin-git\`" >> $GITHUB_STEP_SUMMARY
           echo "使用 pnpm:" >> $GITHUB_STEP_SUMMARY

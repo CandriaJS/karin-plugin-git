@@ -1,18 +1,18 @@
 @font-face {
   font-family: 'Noto Color Emoji';
-  src: url("../fonts/NotoColorEmoji-Regular.woff2") format('woff2');
+  src: url('../fonts/NotoColorEmoji-Regular.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: "Smiley Sans";
-  src: url("../fonts/SmileySans-Oblique.woff2") format("woff2");
-  font-display: swap
+  font-family: 'Smiley Sans';
+  src: url('../fonts/SmileySans-Oblique.woff2') format('woff2');
+  font-display: swap;
 }
 
 @font-face {
-  font-family: "Douyin Sans";
-  src: url("../fonts/DouyinSansBold.woff2") format("woff2");
-  font-display: swap
+  font-family: 'Douyin Sans';
+  src: url('../fonts/DouyinSansBold.woff2') format('woff2');
+  font-display: swap;
 }
 
 * {
@@ -23,11 +23,15 @@
 
 body {
   min-width: 800px;
-  width: 100%; 
+  width: 100%;
 }
 
 .container {
-  font-family: Douyin Sans, Smiley Sans, Noto Color Emoji, sans-serif
+  font-family:
+    Douyin Sans,
+    Smiley Sans,
+    Noto Color Emoji,
+    sans-serif;
 }
 
 .card {
@@ -98,7 +102,7 @@ body {
   gap: 0px;
 }
 
-.branch-icon img{
+.branch-icon img {
   width: 16px;
   height: 16px;
   margin-right: 5px;
@@ -128,7 +132,7 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.8);
+  border: 2px solid rgba(255, 255, 255, 0.8);
   object-fit: cover;
   background-color: #fff;
   display: block;
@@ -153,20 +157,20 @@ body {
 }
 
 .author-info .author-avatar img {
-  border: 2px solid rgba(255,255,255,0.8);
+  border: 2px solid rgba(255, 255, 255, 0.8);
 }
 
 .time-info {
   color: #666;
   font-size: 14px;
-  margin-left: auto; 
-  padding-left: 10px;    
-  white-space: nowrap;    
+  margin-left: auto;
+  padding-left: 10px;
+  white-space: nowrap;
   flex-shrink: 0;
-  order: 1;            
+  order: 1;
 }
 
-.commit-icon img{
+.commit-icon img {
   width: 30px;
   height: 30px;
 }
@@ -201,7 +205,7 @@ body {
   flex-shrink: 0;
   gap: 12px;
   margin-left: auto;
-  padding-right: 10px; 
+  padding-right: 10px;
   padding-left: 15px;
   white-space: nowrap;
 }
@@ -220,7 +224,7 @@ body {
 }
 
 .changes-divider {
-  color: rgba(132, 141, 151); 
+  color: rgba(132, 141, 151);
 }
 
 .commit-icon {

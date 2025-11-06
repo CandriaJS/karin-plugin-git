@@ -1,10 +1,10 @@
-import { Version } from "@/root";
-import { HelpListType } from "@/types/help";
+import { Version } from '@/root'
+import { HelpListType } from '@/types/help'
 
-export const helpList:HelpListType = [
+export const helpList: HelpListType = [
   {
     group: '常用操作',
-    list: []
+    list: [],
   },
   {
     group: '管理命令，仅主人可用',
@@ -13,8 +13,8 @@ export const helpList:HelpListType = [
       {
         icon: `${Version.Plugin_Path}/resources/icons/subscription.svg`,
         title: '#git添加订阅仓库owner/repo[:branch]',
-        desc: '添加一个订阅仓库'
-      }
-    ]
-  }
+        desc: '添加一个订阅仓库',
+      },
+    ],
+  },
 ]
