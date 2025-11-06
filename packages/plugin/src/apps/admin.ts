@@ -3,7 +3,7 @@ import { Platform } from '@/types'
 import karin from 'node-karin'
 
 export const AddRepo = karin.command(
-  /^#?git(?:添加|add)订阅仓库([^/\s]+)[/\s]([^/\s]+)(?::([^/\s]+))?$/i,
+  /^#?(?:git(?:添加|add)订阅仓库)([^/\s]+)[/\s]([^/\s]+)(?::([^/\s]+))?$/i,
   async (e) => {
     const [, owner, repo, branch] = e.msg.match(AddRepo!.reg)!
     let botId = e.selfId
