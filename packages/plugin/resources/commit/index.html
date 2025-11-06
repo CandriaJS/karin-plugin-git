@@ -19,6 +19,8 @@
           <h2>Gitee 仓库更新推送</h2>
           {{else if platform === 'gitcode'}}
           <h2>GitCode 仓库更新推送</h2>
+          {{else if platform === 'cnb'}}
+          <h2>Cnb 仓库更新推送</h2>
           {{else}}
           <h2>GitHub 仓库更新推送</h2>
           {{/if}}
@@ -31,15 +33,11 @@
                 {{if platform === 'github'}}
                 <img src="{{_res_path}}/icons/github.svg" alt="GitHub Logo" />
                 {{else if platform === 'gitee'}}
-                <img
-                  src="{{_res_path}}/common/images/icon/Gitee.svg"
-                  alt="Gitee Logo"
-                />
+                <img src="{{_res_path}}/icons/gitee.svg" alt="Gitee Logo" />
                 {{else if platform === 'gitcode'}}
-                <img
-                  src="{{_res_path}}/common/images/icon/Gitcode.svg"
-                  alt="Gitcode Logo"
-                />
+                <img src="{{_res_path}}/icons/gitcode.svg" alt="Gitcode Logo" />
+                {{else if platform === 'gitcode'}}
+                <img src="{{_res_path}}/icons/cnb.svg" alt="Cnb Logo" />
                 {{else}}
                 <img src="{{_res_path}}/icons/github.svg" alt="GitHub Logo" />
                 {{/if}}

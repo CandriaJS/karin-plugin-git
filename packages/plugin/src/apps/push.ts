@@ -14,7 +14,7 @@ import { Platform } from '@/types'
 import { ClientType } from '@/types/common/client'
 
 export const github = karin.task(
-  'karin-plugin-git:github',
+  'karin-plugin-git:push:github',
   Config.github.cron || '0 */5 * * * *',
   async () => {
     const token = Config.github.token
@@ -22,6 +22,51 @@ export const github = karin.task(
     try {
       const client = Client.github()
       await handleRepoPush(client, Platform.GitHub)
+    } catch (e) {
+      logger.error(e)
+    }
+  },
+)
+
+export const gitee = karin.task(
+  'karin-plugin-git:push:gitee',
+  Config.gitee.cron || '0 */5 * * * *',
+  async () => {
+    const token = Config.gitee.token
+    if (isEmpty(token)) return logger.warn('Gitee Token, 跳过任务')
+    try {
+      const client = Client.gitee()
+      await handleRepoPush(client, Platform.Gitee)
+    } catch (e) {
+      logger.error(e)
+    }
+  },
+)
+
+export const gitcode = karin.task(
+  'karin-plugin-git:push:gitee',
+  Config.gitcode.cron || '0 */5 * * * *',
+  async () => {
+    const token = Config.gitcode.token
+    if (isEmpty(token)) return logger.warn('GitCode Token, 跳过任务')
+    try {
+      const client = Client.gitcode()
+      await handleRepoPush(client, Platform.GitCode)
+    } catch (e) {
+      logger.error(e)
+    }
+  },
+)
+
+export const cnb = karin.task(
+  'karin-plugin-git:push:cnb',
+  Config.cnb.cron || '0 */5 * * * *',
+  async () => {
+    const token = Config.cnb.token
+    if (isEmpty(token)) return logger.warn('未配置CNB Token, 跳过任务')
+    try {
+      const client = Client.cnb()
+      await handleRepoPush(client, Platform.Cnb)
     } catch (e) {
       logger.error(e)
     }
