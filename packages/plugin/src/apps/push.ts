@@ -1,4 +1,3 @@
-import { render_markdown } from '@/common/render'
 import { db } from '@/models'
 import karin, {
   getBot,
@@ -55,8 +54,8 @@ const handleRepoPush = async (client: ClientType, platform: Platform) => {
       repo: pushRepoInfo.repo,
       botId: pushRepoInfo.botId,
       groupId: pushRepoInfo.groupId,
-      title: await render_markdown(messageParts[0]),
-      body: await render_markdown(messageParts.slice(1).join('\n')),
+      title: await Render.markdown(messageParts[0]),
+      body: await Render.markdown(messageParts.slice(1).join('\n')),
       commitDate: formatDate(commitInfo.commit.committer.date),
     }
 

@@ -217,6 +217,16 @@ const Render = {
     const base64 = (await canvas.encode('png')).toString('base64')
     return segment.image(`base64://${base64}`)
   },
+  async markdown(markdown: string): Promise<string> {
+    const md = new MarkdownIt({
+      html: true,
+      breaks: true,
+    })
+    md.use(emoji)
+    md.use(tasklist)
+    md.renderer.rules.bullet_list_open = () => '<ul style="list-style: none;">'
+    return Promise.resolve(md.render(markdown))
+  },
 }
 
 /// 绘制文本,自动换行
@@ -248,14 +258,3 @@ function wrapText(
 }
 
 export { Render }
-
-export const render_markdown = async (markdown: string) => {
-  const md = new MarkdownIt({
-    html: true,
-    breaks: true,
-  })
-  md.use(emoji)
-  md.use(tasklist)
-  md.renderer.rules.bullet_list_open = () => '<ul style="list-style: none;">'
-  return Promise.resolve(md.render(markdown))
-}
