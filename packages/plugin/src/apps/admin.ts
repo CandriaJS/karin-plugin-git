@@ -50,6 +50,48 @@ export const AddRepo = karin.command(
   },
 )
 
+export const RemoveRepo = karin.command(
+  /^#?git(?:移除|删除|remove)([^\s]+)?订阅仓库([^/\s]+)\/([^:\s]+)(?::([^/\s]+))?$/i,
+  async (e) => {
+    const [, platform, owner, repo, branch] = e.msg.match(RemoveRepo!.reg)!
+    let botId = e.selfId
+    let groupId = e.groupId
+    let platformName = Platform.GitHub
+
+    if (platform?.toLowerCase() === 'gitcode') {
+      platformName = Platform.GitCode
+    } else if (platform?.toLowerCase() === 'gitee') {
+      platformName = Platform.Gitee
+    } else if (platform?.toLowerCase() === 'cnb') {
+      platformName = Platform.Cnb
+    }
+    const PushBranch = branch || 'main'
+
+    let repoInfo = await db.repo.GetRepo(botId, groupId, owner, repo)
+    if (!repoInfo) {
+      return await e.reply("仓库不存在，删除失败")
+    }
+    const PushInfo = await db.push.GetRepo(
+      Platform.GitHub,
+      repoInfo.id,
+      PushBranch,
+    )
+    if (!PushInfo) {
+      return await e.reply("推送订阅不存在，删除失败")
+    }
+    await db.push.RemoveRepo(platformName, repoInfo.id, PushBranch)
+    await e.reply(
+      `删除订阅仓库成功, 平台: ${platformName}, 仓库: ${owner}/${repo}, 分支: ${PushBranch}`,
+    )
+  },
+  {
+    name: 'karin-plugin-git:removeRepo',
+    priority: 500,
+    event: 'message.group',
+    permission: 'master',
+  },
+)
+
 export const SetToken = karin.command(
   /^#?git(?:设置|set)([^\s]+)?(?:token|访问令牌)([\s\S]+)$/i,
   async (e) => {

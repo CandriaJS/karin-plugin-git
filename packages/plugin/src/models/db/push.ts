@@ -45,6 +45,24 @@ export async function GetRepo(
   return result
 }
 
+export async function RemoveRepo(
+  platform: Platform,
+  repoId: number,
+  branch: string,
+): Promise<void> {
+  let client = await createClient()
+  await new Promise<void>((resolve, reject) => {
+    client.run(
+      'DELETE FROM push WHERE platform = ? AND repoId = ? AND branch = ?',
+      [platform, repoId, branch],
+      (err) => {
+        if (err) reject(err)
+        else resolve()
+      },
+    )
+  })
+}
+
 export async function UpdateCommitSha(
   platform: Platform,
   repoId: number,
