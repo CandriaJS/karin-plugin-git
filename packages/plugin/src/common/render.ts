@@ -14,7 +14,7 @@ import MarkdownIt from 'markdown-it'
  * @param {string} pct 缩放百分比
  */
 function scale(pct = 1) {
-  const renderScale = 100
+  const renderScale = 150
   const scale = Math.min(2, Math.max(0.5, renderScale / 100))
   pct = pct * scale
   return `style=transform:scale(${pct})`
