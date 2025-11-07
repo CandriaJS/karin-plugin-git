@@ -26,8 +26,8 @@ export const InitDb = async () => {
       repo TEXT NOT NULL,
       botId TEXT NOT NULL,
       groupId TEXT NOT NULL,
-      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
+      updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
       UNIQUE(owner, repo, botId, groupId)
     )
   `)
@@ -40,8 +40,8 @@ export const InitDb = async () => {
       platform TEXT NOT NULL,
       branch TEXT NOT NULL,
       commitSha TEXT,
-      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
+      updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
       FOREIGN KEY (repoId) REFERENCES repo(id) ON DELETE CASCADE
     )
   `)

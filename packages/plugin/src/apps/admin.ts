@@ -1,3 +1,4 @@
+import { Config } from '@/common'
 import { db } from '@/models'
 import { Platform } from '@/types'
 import karin from 'node-karin'
@@ -45,6 +46,29 @@ export const AddRepo = karin.command(
     name: 'karin-plugin-git:addRepo',
     priority: 500,
     event: 'message.group',
+    permission: 'master',
+  },
+)
+
+export const SetToken = karin.command(
+  /^#?git(?:设置|set)([^\s]+)?(?:token|访问令牌)([\s\S]+)$/i,
+  async (e) => {
+      const [, platform, Token] = e.msg.match(SetToken!.reg)!
+      let platformName = Platform.GitHub
+      if (platform?.toLowerCase() === 'gitcode') {
+        platformName = Platform.GitCode
+      } else if (platform?.toLowerCase() === 'gitee') {
+        platformName = Platform.Gitee
+      } else if (platform?.toLowerCase() === 'cnb') {
+        platformName = Platform.Cnb
+      }
+      Config.Modify(platformName, 'token', Token)
+      await e.reply(`设置${platformName}访问令牌成功`)
+  },
+  {
+    name: 'karin-plugin-git:SetToken',
+    priority: 500,
+    event: 'message.friend',
     permission: 'master',
   },
 )
