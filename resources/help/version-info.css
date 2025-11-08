@@ -1,13 +1,12 @@
 @font-face {
-  font-family: 'Helvetica';
-  src: url('https://static.wuliya.cn/static/font/HELVETI.woff') format('woff');
+  font-family: 'Douyin Sans';
+  src: url('../fonts/DouyinSansBold.woff2') format('woff2');
   font-display: swap;
 }
+
 @font-face {
-  font-family: 'NotoColorEmoji';
-  src: url('https://static.wuliya.cn/static/font/NotoColorEmoji-Regular.ttf')
-    format('truetype');
-  font-display: swap;
+  font-family: 'Noto Color Emoji';
+  src: url('../fonts/NotoColorEmoji-Regular.woff2') format('woff2');
 }
 
 * {
@@ -17,7 +16,7 @@
 }
 
 .markdown-body {
-  font-family: Helvetica, NotoColorEmoji, sans-serif;
+    font-family: 'Douyin Sans', 'Noto Color Emoji', sans-serif;
   box-sizing: border-box;
   min-width: 200px;
   width: 100%;
