@@ -21,18 +21,12 @@ jobs:
         with:
           bun-version: latest
 
-      - name: 安装依赖
-        run: |
-          bun install
-          cp -r README.md LICENSE packages/plugin/
-
       - name: 构建plugin
         run: |
           bun install
           bun run build
           mkdir -p ${{ runner.temp }}/temp/plugin
           cp -r package.json CHANGELOG.md README.md LICENSE resources config lib ${{ runner.temp }}/temp/plugin
-        working-directory: packages/plugin
 
       - name: 上传plugin构建产物
         uses: actions/upload-artifact@v4

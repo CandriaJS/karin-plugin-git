@@ -7,6 +7,28 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@mdit/plugin-tasklist':
+        specifier: ^0.22.2
+        version: 0.22.2(markdown-it@14.1.0)
+      canvas:
+        specifier: npm:@napi-rs/canvas@^0.1.81
+        version: '@napi-rs/canvas@0.1.81'
+      dayjs:
+        specifier: ^1.11.19
+        version: 1.11.19
+      es-toolkit:
+        specifier: ^1.41.0
+        version: 1.41.0
+      markdown-it:
+        specifier: ^14.1.0
+        version: 14.1.0
+      markdown-it-emoji:
+        specifier: ^3.0.0
+        version: 3.0.0
+      nipaw:
+        specifier: npm:@puniyu/nipaw@^1.6.1
+        version: '@puniyu/nipaw@1.6.1'
     devDependencies:
       '@karinjs/plugin-puppeteer':
         specifier: ^1.0.21
@@ -17,6 +39,12 @@ importers:
       '@types/express':
         specifier: ^5.0.5
         version: 5.0.5
+      '@types/markdown-it':
+        specifier: ^14.1.2
+        version: 14.1.2
+      '@types/markdown-it-emoji':
+        specifier: ^3.0.1
+        version: 3.0.1
       '@types/node':
         specifier: ^22.15.3
         version: 22.18.9
@@ -44,37 +72,6 @@ importers:
       typescript:
         specifier: ^5.8.3
         version: 5.9.3
-
-  packages/plugin:
-    dependencies:
-      '@mdit/plugin-tasklist':
-        specifier: ^0.22.2
-        version: 0.22.2(markdown-it@14.1.0)
-      canvas:
-        specifier: npm:@napi-rs/canvas@^0.1.81
-        version: '@napi-rs/canvas@0.1.81'
-      dayjs:
-        specifier: ^1.11.19
-        version: 1.11.19
-      es-toolkit:
-        specifier: ^1.41.0
-        version: 1.41.0
-      markdown-it:
-        specifier: ^14.1.0
-        version: 14.1.0
-      markdown-it-emoji:
-        specifier: ^3.0.0
-        version: 3.0.0
-      nipaw:
-        specifier: npm:@puniyu/nipaw@^1.6.1
-        version: '@puniyu/nipaw@1.6.1'
-    devDependencies:
-      '@types/markdown-it':
-        specifier: ^14.1.2
-        version: 14.1.2
-      '@types/markdown-it-emoji':
-        specifier: ^3.0.1
-        version: 3.0.1
 
 packages:
 

@@ -64,7 +64,7 @@
     }
   ],
   "packages": {
-    "packages/plugin": {
+    ".": {
       "release-type": "node"
     }
   },

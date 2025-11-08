@@ -83,8 +83,6 @@ export const push = karin.command(
       const groupId = e.groupId
       const PushInfos = await db.push.GetAll()
 
-      if (isEmpty(Config.cnb.token))
-        return await e.reply('未配置CNB Token, 请先配置CNB Token')
       let client: ClientType 
       let image: ImageElement[] = []
       for (const pushInfo of PushInfos) {

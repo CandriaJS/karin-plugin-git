@@ -1,20 +1,57 @@
 {
-  "name": "@candriajs/git-poject",
+  "name": "@candriajs/karin-plugin-git",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
-  "license": "LGPL-3.0-only",
+  "description": "一个karin的git平台仓库订阅推送",
+  "keywords": [
+    "karin-plugin",
+    "karin-plugin-git"
+  ],
+  "homepage": "https://github.com/CandriaJS/karin-plugin-git",
+  "bugs": {
+    "url": "https://github.com/CandriaJS/karin-plugin-git/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CandriaJS/karin-plugin-git.git"
+  },
+  "license": "GNU General Public License v3.0",
   "author": "CandriaJS",
   "type": "module",
-  "main": "",
+  "main": "lib/index.js",
+  "files": [
+    "config/",
+    "lib/",
+    "resources/",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "scripts": {
-    "dev:plugin": "pnpm --filter @candriajs/karin-plugin-git dev",
-    "build:plugin": "pnpm --filter @candriajs/karin-plugin-git build"
+    "app": "node --import tsx src/app.ts",
+    "build": "tsc --noEmit && tsdown",
+    "dev": "cross-env EBV_FILE=\"development.env\" node --import tsx src/app.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "pub": "npm publish --access public",
+    "sort": "sort-package-json",
+    "watch": "cross-env EBV_FILE=\"development.env\" tsx watch --include \"src/**/*.ts\" src/app.ts"
+  },
+  "dependencies": {
+    "@mdit/plugin-tasklist": "^0.22.2",
+    "canvas": "npm:@napi-rs/canvas@^0.1.81",
+    "dayjs": "^1.11.19",
+    "es-toolkit": "^1.41.0",
+    "markdown-it": "^14.1.0",
+    "markdown-it-emoji": "^3.0.0",
+    "nipaw": "npm:@puniyu/nipaw@^1.6.1"
   },
   "devDependencies": {
     "@karinjs/plugin-puppeteer": "^1.0.21",
     "@prettier/plugin-oxc": "^0.0.4",
     "@types/express": "^5.0.5",
+    "@types/markdown-it": "^14.1.2",
+    "@types/markdown-it-emoji": "^3.0.1",
     "@types/node": "^22.15.3",
     "cross-env": "^7.0.3",
     "node-karin": "^1.12.2",
@@ -25,5 +62,27 @@
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
-  "packageManager": "pnpm@10.13.1"
+  "karin": {
+    "main": "src/index.ts",
+    "web": "./lib/web.config.js",
+    "ts-web": "./src/web.config.ts",
+    "apps": [
+      "lib/apps"
+    ],
+    "ts-apps": [
+      "src/apps"
+    ],
+    "static": [
+      "resources"
+    ],
+    "files": [
+      "config",
+      "data",
+      "resources"
+    ],
+    "engines": {
+      "karin": ">=1.9.1"
+    }
+  },
+  "packageManager": "pnpm@10.14.0"
 }

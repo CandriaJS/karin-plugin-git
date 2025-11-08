@@ -1,7 +1,3 @@
 onlyBuiltDependencies:
   - '@karinjs/sqlite3-cjs'
-  - bufferutil
   - esbuild
-  - msw
-packages:
-  - 'packages/*'
