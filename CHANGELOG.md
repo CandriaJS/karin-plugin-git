@@ -1,4 +1,4 @@
-# Changelog
+# 变更日志
 
 ## [1.1.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.0.0...v1.1.0) (2025-11-09)
 
@@ -36,5 +36,3 @@
 * **plugin:** 重构 Markdown 渲染逻辑 ([0980b71](https://github.com/CandriaJS/karin-plugin-git/commit/0980b71666d3845791a8a88eeca7c47de7a2af4f))
 * **project:** 重构项目结构并优化样式 ([ef3c54e](https://github.com/CandriaJS/karin-plugin-git/commit/ef3c54e37f35125a41a0ab6f7bf2647e7c3d95a0))
 * **push:** 重构仓库推送逻辑 ([4d8b521](https://github.com/CandriaJS/karin-plugin-git/commit/4d8b5215fdccdea1dff19b2a9507db1d28e7b71e))
-
-## 变更日志
