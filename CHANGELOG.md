@@ -1,5 +1,12 @@
 # 变更日志
 
+## [1.1.1](https://github.com/CandriaJS/karin-plugin-git/compare/v1.1.0...v1.1.1) (2025-11-09)
+
+
+### 🎡 持续集成
+
+* 修正发版 ([35e5a1d](https://github.com/CandriaJS/karin-plugin-git/commit/35e5a1dcc1b4ec7851d6d307d49d8095add13e9f))
+
 ## [1.1.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.0.0...v1.1.0) (2025-11-09)
 
 
