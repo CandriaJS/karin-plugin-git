@@ -3,7 +3,6 @@ import axios from 'node-karin/axios'
 
 import { Version } from '@/root'
 import { InitDb } from '@/models/db'
-import { GlobalFonts } from 'canvas'
 
 export const KARIN_PLUGIN_INIT = async () => {
   let responseData = '加载失败'
@@ -18,7 +17,6 @@ export const KARIN_PLUGIN_INIT = async () => {
     logger.error(logger.chalk.red.bold('⚠️ 访问统计数据失败，超时或网络错误'))
   }
   await InitDb()
-  load_fonts()
   logger.info(logger.chalk.bold.rgb(0, 255, 0)('========= 🌟🌟🌟 ========='))
   logger.info(
     logger.chalk.bold.blue('🌍 当前运行环境: ') +
@@ -38,11 +36,3 @@ export const KARIN_PLUGIN_INIT = async () => {
   logger.info(logger.chalk.green.bold('========================='))
 }
 
-function load_fonts() {
-  GlobalFonts.registerFromPath(
-    `${Version.Plugin_Path}/resources/fonts/NotoColorEmoji-Regular.woff2`,
-  )
-  GlobalFonts.registerFromPath(
-    `${Version.Plugin_Path}/resources/fonts/DouyinSansBold.woff2`,
-  )
-}

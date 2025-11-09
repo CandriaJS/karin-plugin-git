@@ -11,9 +11,6 @@ importers:
       '@mdit/plugin-tasklist':
         specifier: ^0.22.2
         version: 0.22.2(markdown-it@14.1.0)
-      canvas:
-        specifier: npm:@napi-rs/canvas@^0.1.81
-        version: '@napi-rs/canvas@0.1.81'
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
@@ -327,75 +324,6 @@ packages:
     peerDependenciesMeta:
       markdown-it:
         optional: true
-
-  '@napi-rs/canvas-android-arm64@0.1.81':
-    resolution: {integrity: sha512-78Lz+AUi+MsWupyZjXwpwQrp1QCwncPvRZrdvrROcZ9Gq9grP7LfQZiGdR8LKyHIq3OR18mDP+JESGT15V1nXw==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [android]
-
-  '@napi-rs/canvas-darwin-arm64@0.1.81':
-    resolution: {integrity: sha512-omejuKgHWKDGoh8rsgsyhm/whwxMaryTQjJTd9zD7hiB9/rzcEEJLHnzXWR5ysy4/tTjHaQotE6k2t8eodTLnA==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@napi-rs/canvas-darwin-x64@0.1.81':
-    resolution: {integrity: sha512-EYfk+co6BElq5DXNH9PBLYDYwc4QsvIVbyrsVHsxVpn4p6Y3/s8MChgC69AGqj3vzZBQ1qx2CRCMtg5cub+XuQ==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [darwin]
-
-  '@napi-rs/canvas-linux-arm-gnueabihf@0.1.81':
-    resolution: {integrity: sha512-teh6Q74CyAcH31yLNQGR9MtXSFxlZa5CI6vvNUISI14gWIJWrhOwUAOly+KRe1aztWR0FWTVSPxM4p5y+06aow==}
-    engines: {node: '>= 10'}
-    cpu: [arm]
-    os: [linux]
-
-  '@napi-rs/canvas-linux-arm64-gnu@0.1.81':
-    resolution: {integrity: sha512-AGEopHFYRzJOjxY+2G1RmHPRnuWvO3Qdhq7sIazlSjxb3Z6dZHg7OB/4ZimXaimPjDACm9qWa6t5bn9bhXvkcw==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-    libc: [glibc]
-
-  '@napi-rs/canvas-linux-arm64-musl@0.1.81':
-    resolution: {integrity: sha512-Bj3m1cl4GIhsigkdwOxii4g4Ump3/QhNpx85IgAlCCYXpaly6mcsWpuDYEabfIGWOWhDUNBOndaQUPfWK1czOQ==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-    libc: [musl]
-
-  '@napi-rs/canvas-linux-riscv64-gnu@0.1.81':
-    resolution: {integrity: sha512-yg/5NkHykVdwPlD3XObwCa/EswkOwLHswJcI9rHrac+znHsmCSj5AMX/RTU9Z9F6lZTwL60JM2Esit33XhAMiw==}
-    engines: {node: '>= 10'}
-    cpu: [riscv64]
-    os: [linux]
-    libc: [glibc]
-
-  '@napi-rs/canvas-linux-x64-gnu@0.1.81':
-    resolution: {integrity: sha512-tPfMpSEBuV5dJSKexO/UZxpOqnYTaNbG8aKa1ek8QsWu+4SJ/foWkaxscra/RUv85vepx6WWDjzBNbNJsTnO0w==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-    libc: [glibc]
-
-  '@napi-rs/canvas-linux-x64-musl@0.1.81':
-    resolution: {integrity: sha512-1L0xnYgzqn8Baef+inPvY4dKqdmw3KCBoe0NEDgezuBZN7MA5xElwifoG8609uNdrMtJ9J6QZarsslLRVqri7g==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-    libc: [musl]
-
-  '@napi-rs/canvas-win32-x64-msvc@0.1.81':
-    resolution: {integrity: sha512-57ryVbhm/z7RE9/UVcS7mrLPdlayLesy+9U0Uf6epCoeSGrs99tfieCcgZWFbIgmByQ1AZnNtFI2N6huqDLlWQ==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [win32]
-
-  '@napi-rs/canvas@0.1.81':
-    resolution: {integrity: sha512-ReCjd5SYI/UKx/olaQLC4GtN6wUQGjlgHXs1lvUvWGXfBMR3Fxnik3cL+OxKN5ithNdoU0/GlCrdKcQDFh2XKQ==}
-    engines: {node: '>= 10'}
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
@@ -1361,49 +1289,6 @@ snapshots:
       '@types/markdown-it': 14.1.2
     optionalDependencies:
       markdown-it: 14.1.0
-
-  '@napi-rs/canvas-android-arm64@0.1.81':
-    optional: true
-
-  '@napi-rs/canvas-darwin-arm64@0.1.81':
-    optional: true
-
-  '@napi-rs/canvas-darwin-x64@0.1.81':
-    optional: true
-
-  '@napi-rs/canvas-linux-arm-gnueabihf@0.1.81':
-    optional: true
-
-  '@napi-rs/canvas-linux-arm64-gnu@0.1.81':
-    optional: true
-
-  '@napi-rs/canvas-linux-arm64-musl@0.1.81':
-    optional: true
-
-  '@napi-rs/canvas-linux-riscv64-gnu@0.1.81':
-    optional: true
-
-  '@napi-rs/canvas-linux-x64-gnu@0.1.81':
-    optional: true
-
-  '@napi-rs/canvas-linux-x64-musl@0.1.81':
-    optional: true
-
-  '@napi-rs/canvas-win32-x64-msvc@0.1.81':
-    optional: true
-
-  '@napi-rs/canvas@0.1.81':
-    optionalDependencies:
-      '@napi-rs/canvas-android-arm64': 0.1.81
-      '@napi-rs/canvas-darwin-arm64': 0.1.81
-      '@napi-rs/canvas-darwin-x64': 0.1.81
-      '@napi-rs/canvas-linux-arm-gnueabihf': 0.1.81
-      '@napi-rs/canvas-linux-arm64-gnu': 0.1.81
-      '@napi-rs/canvas-linux-arm64-musl': 0.1.81
-      '@napi-rs/canvas-linux-riscv64-gnu': 0.1.81
-      '@napi-rs/canvas-linux-x64-gnu': 0.1.81
-      '@napi-rs/canvas-linux-x64-musl': 0.1.81
-      '@napi-rs/canvas-win32-x64-msvc': 0.1.81
 
   '@napi-rs/wasm-runtime@0.2.12':
     dependencies:

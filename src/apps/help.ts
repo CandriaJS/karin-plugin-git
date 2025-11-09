@@ -3,13 +3,14 @@ import karin, { Message, requireFile } from 'node-karin'
 
 import { Render } from '@/common'
 import { Version } from '@/root'
-import { Role } from '@/types/help'
 
 export const help = karin.command(
   /^#?(?:(git))(?:命令|帮助|菜单|help|说明|功能|指令|使用说明)$/i,
   async (e: Message) => {
-    const role: Role = e.isMaster ? 'master' : 'member'
-    const img = await Render.help(role)
+    const role = e.isMaster ? 'master' : 'member'
+    const img = await Render.render('help/index', {
+      role: role,
+    })
     await e.reply(img)
     return true
   },
