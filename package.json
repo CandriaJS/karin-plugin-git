@@ -43,7 +43,7 @@
     "es-toolkit": "^1.41.0",
     "markdown-it": "^14.1.0",
     "markdown-it-emoji": "^3.0.0",
-    "nipaw": "npm:@puniyu/nipaw@^1.6.1"
+    "nipaw": "npm:@puniyu/nipaw@^1.7.0"
   },
   "devDependencies": {
     "@karinjs/plugin-puppeteer": "^1.0.21",

@@ -6,9 +6,15 @@ export interface ClientConfigType {
   /// github访问令牌
   token: string
 }
+
+export interface GithubCongfigType extends ClientConfigType {
+  /// 反向代理地址
+  reverseProxy: string
+}
+
 export interface ConfigType {
   /// GitHub配置
-  github: ClientConfigType
+  github: GithubCongfigType
   /// Gitee配置
   gitee: ClientConfigType
   /// GitCode配置
