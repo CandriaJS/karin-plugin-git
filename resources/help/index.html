@@ -46,10 +46,12 @@
                   <img src="{{_res_path}}/icons/subscription.svg" alt="icon" />
                 </div>
                 <h3 class="card-title">
-                  #git添加[platform]订阅仓库owner/repo[:branch]
+                  #git添加[platform]订阅仓库owner/repo[:branch] [event]
                 </h3>
               </div>
-              <span class="card-desc">添加一个订阅仓库</span>
+              <span class="card-desc"
+                >添加一个订阅仓库, event可选:push,issue</span
+              >
             </div>
 
             <div class="card">
@@ -58,7 +60,7 @@
                   <img src="{{_res_path}}/icons/subscription.svg" alt="icon" />
                 </div>
                 <h3 class="card-title">
-                  #git删除[platform]订阅仓库owner/repo[:branch]
+                  #git删除[platform]订阅仓库owner/repo[:branch] [event]
                 </h3>
               </div>
               <span class="card-desc">删除一个订阅仓库</span>
@@ -73,7 +75,6 @@
               </div>
               <span class="card-desc">设置一个平台的访问令牌</span>
             </div>
-
           </div>
         </div>
         {{/if}}

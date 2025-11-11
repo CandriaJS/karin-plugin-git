@@ -8,9 +8,9 @@ import karin, {
 } from 'node-karin'
 import { Config, Render, Client } from '@/common'
 import { isEmpty } from 'es-toolkit/compat'
-import { formatDate } from '@/common/date'
+import { formatDate } from '@/common'
 import { PushCommitInfo } from '@/types/push'
-import { Platform } from '@/types'
+import { EventType, Platform } from '@/types'
 import { ClientType } from '@/types/common/client'
 import { CommitInfo } from 'nipaw'
 import { PushRepo, RepoInfo } from '@/types/db'
@@ -65,7 +65,7 @@ export const cnb = karin.task(
   Config.cnb.cron || '0 */5 * * * *',
   async () => {
     const token = Config.cnb.token
-    if (isEmpty(token)) return logger.warn('未配置CNB Token, 跳过任务')
+    if (isEmpty(token)) return logger.warn('未配置CnbCool Token, 跳过任务')
     try {
       const client = Client.cnb()
       await handleRepoPush(client, Platform.Cnb)
@@ -83,7 +83,7 @@ export const push = karin.command(
       const groupId = e.groupId
       const PushInfos = await db.push.GetAll()
 
-      let client: ClientType 
+      let client: ClientType
       let image: ImageElement[] = []
       for (const pushInfo of PushInfos) {
         const RepoInfo = await db.repo.GetRepo(pushInfo.repoId)
@@ -157,11 +157,14 @@ export const push = karin.command(
 )
 
 const handleRepoPush = async (client: ClientType, platform: Platform) => {
-  const all = await db.push.GetAll()
+  const all = await db.event.GetAll()
 
   if (isEmpty(all)) return
 
-  const repoInfos = all.filter((repo) => repo.platform === platform)
+  const repoInfos = all.filter(
+    (repo) =>
+      repo.platform === platform && repo.eventType.includes(EventType.Push),
+  )
 
   const groupMap = new Map<
     string,
@@ -173,27 +176,31 @@ const handleRepoPush = async (client: ClientType, platform: Platform) => {
   >()
 
   for (const repo of repoInfos) {
-    const pushRepoInfo = await db.repo.GetRepo(repo.repoId)
-    if (!pushRepoInfo) continue
-
-    const commitInfo = await client.getCommitInfo(
-      pushRepoInfo.owner,
-      pushRepoInfo.repo,
-      repo.branch,
+    const pushRepoList = (await db.push.GetAll()).filter(
+      (pushRepo) => pushRepo.repoId === repo.repoId,
     )
+    if (!pushRepoList.length) continue
 
-    if (commitInfo.sha === repo.commitSha) continue
+    for (const pushRepo of pushRepoList) {
+      const pushRepoInfo = await db.repo.GetRepo(pushRepo.repoId)
+      if (!pushRepoInfo) continue
 
-    const groupKey = `${pushRepoInfo.botId}-${pushRepoInfo.groupId}`
-    if (!groupMap.has(groupKey)) {
-      groupMap.set(groupKey, [])
+      const commitInfo = await client.getCommitInfo(
+        pushRepoInfo.owner,
+        pushRepoInfo.repo,
+        pushRepo.branch,
+      )
+      if (!commitInfo || commitInfo.sha === pushRepo.commitSha) continue
+      const groupKey = `${pushRepoInfo.botId}-${pushRepoInfo.groupId}`
+      if (!groupMap.has(groupKey)) {
+        groupMap.set(groupKey, [])
+      }
+      groupMap.get(groupKey)!.push({
+        pushRepo,
+        pushRepoInfo,
+        commitInfo,
+      })
     }
-
-    groupMap.get(groupKey)!.push({
-      pushRepo: repo,
-      pushRepoInfo,
-      commitInfo,
-    })
   }
 
   for (const [groupKey, items] of groupMap.entries()) {

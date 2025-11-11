@@ -69,5 +69,4 @@ const Render = {
   },
 }
 
-
 export { Render }
