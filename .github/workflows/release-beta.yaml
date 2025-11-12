@@ -112,5 +112,5 @@ jobs:
 
             你可以通过以下命令安装该版本：
             ```
-            pnpm add https://pkg.pr.new/${{ github.repository }}/karin-plugin-git@${{ needs.beta-info.outputs.short_commit_hash }} -w
+            pnpm add https://pkg.pr.new/${{ github.repository }}/@candriajs/karin-plugin-git@${{ needs.beta-info.outputs.short_commit_hash }} -w
             ```

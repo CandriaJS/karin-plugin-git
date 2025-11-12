@@ -35,4 +35,3 @@ export const KARIN_PLUGIN_INIT = async () => {
   )
   logger.info(logger.chalk.green.bold('========================='))
 }
-

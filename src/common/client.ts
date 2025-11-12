@@ -4,9 +4,9 @@ import { CnbClient, GitCodeClient, GiteeClient, GithubClient } from 'nipaw'
 
 export const github = () => {
   const client = new GithubClient()
-  if (!isEmpty(Config.github.reverseProxy)){
+  if (!isEmpty(Config.github.reverseProxy)) {
     client.setReverseProxy(Config.github.reverseProxy)
-  } else {
+  } else if (!isEmpty(Config.github.proxy)) {
     client.setProxy(Config.github.proxy)
   }
   if (!isEmpty(Config.github.token)) {

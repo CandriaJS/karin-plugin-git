@@ -32,17 +32,44 @@ export const InitDb = async () => {
     )
   `)
 
+  // 创建 event 表
+  client.exec(`
+    CREATE TABLE IF NOT EXISTS event (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      repoId INTEGER NOT NULL,
+      platform TEXT NOT NULL,
+      eventType TEXT NOT NULL,
+      createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
+      updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
+      FOREIGN KEY (repoId) REFERENCES repo(id) ON DELETE CASCADE
+    )
+  `)
+
   // 创建 push 表
   client.exec(`
     CREATE TABLE IF NOT EXISTS push (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      repoId INTEGER NOT NULL,
-      platform TEXT NOT NULL,
+      eventId INTEGER NOT NULL,
       branch TEXT NOT NULL,
       commitSha TEXT,
       createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
       updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
-      FOREIGN KEY (repoId) REFERENCES repo(id) ON DELETE CASCADE
+      FOREIGN KEY (eventId) REFERENCES event(id) ON DELETE CASCADE
+    )
+  `)
+
+  // 创建 issue 表
+  client.exec(`
+    CREATE TABLE IF NOT EXISTS issue (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      eventId INTEGER NOT NULL,
+      issueId TEXT NOT NULL,
+      title TEXT,
+      body TEXT,
+      state TEXT,
+      createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
+      updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
+      FOREIGN KEY (eventId) REFERENCES event(id) ON DELETE CASCADE
     )
   `)
 
@@ -50,9 +77,16 @@ export const InitDb = async () => {
   client.exec(
     `CREATE INDEX IF NOT EXISTS idx_repo_lookup ON repo(botId, groupId)`,
   )
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_repo ON push(repoId)`)
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_platform ON push(platform)`)
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_event ON push(eventId)`)
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_issue_event ON issue(eventId)`)
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_event_repo ON event(repoId)`)
+  client.exec(
+    `CREATE INDEX IF NOT EXISTS idx_event_platform ON event(platform)`,
+  )
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_event_type ON event(eventType)`)
 }
 
 export * as push from './push'
 export * as repo from './repo'
+export * as issue from './issue'
+export * as event from './event'
