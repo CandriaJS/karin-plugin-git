@@ -89,7 +89,7 @@ export const AddRepo = karin.command(
     await e.reply(msg)
   },
   {
-    name: 'karin-plugin-git:addRepo',
+    name: 'karin-plugin-git:admin:addRepo',
     priority: 500,
     event: 'message.group',
     permission: 'master',
@@ -147,7 +147,7 @@ export const RemoveRepo = karin.command(
     )
   },
   {
-    name: 'karin-plugin-git:removeRepo',
+    name: 'karin-plugin-git:admin:removeRepo',
     priority: 500,
     event: 'message.group',
     permission: 'master',
@@ -170,7 +170,7 @@ export const SetToken = karin.command(
     await e.reply(`设置${platformName}访问令牌成功`)
   },
   {
-    name: 'karin-plugin-git:SetToken',
+    name: 'karin-plugin-git:admin:SetToken',
     priority: 500,
     event: 'message.friend',
     permission: 'master',

@@ -19,11 +19,11 @@ export const github = karin.task(
     if (isEmpty(token)) return logger.warn('未配置GitHub Token, 跳过任务')
     try {
       const client = Client.github()
-      handleRepoIssue(client, Platform.GitHub)
+      await handleRepoIssue(client, Platform.GitHub)
     } catch (e) {
       logger.error(e)
     }
-  },
+  }
 )
 
 export const gitee = karin.task(
@@ -34,7 +34,7 @@ export const gitee = karin.task(
     if (isEmpty(token)) return logger.warn('未配置Gitee Token, 跳过任务')
     try {
       const client = Client.gitee()
-      handleRepoIssue(client, Platform.Gitee)
+      await handleRepoIssue(client, Platform.Gitee)
     } catch (e) {
       logger.error(e)
     }
@@ -49,7 +49,7 @@ export const gitcode = karin.task(
     if (isEmpty(token)) return logger.warn('未配置GitCode Token, 跳过任务')
     try {
       const client = Client.gitcode()
-      handleRepoIssue(client, Platform.GitCode)
+      await handleRepoIssue(client, Platform.GitCode)
     } catch (e) {
       logger.error(e)
     }
@@ -64,7 +64,7 @@ export const cnb = karin.task(
     if (isEmpty(token)) return logger.warn('未配置CnbCool Token, 跳过任务')
     try {
       const client = Client.cnb()
-      handleRepoIssue(client, Platform.Cnb)
+      await handleRepoIssue(client, Platform.Cnb)
     } catch (e) {
       logger.error(e)
     }
