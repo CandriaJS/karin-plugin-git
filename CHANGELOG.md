@@ -1,5 +1,18 @@
 # 变更日志
 
+## [1.2.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.1.1...v1.2.0) (2025-11-12)
+
+
+### ✨ 新功能
+
+* **github:** 添加反向代理配置支持 ([e986b98](https://github.com/CandriaJS/karin-plugin-git/commit/e986b98c108c878f49643c981f6029ae678e1077))
+* **git:** 支持订阅仓库议题变更推送 ([83718de](https://github.com/CandriaJS/karin-plugin-git/commit/83718dec328349a39670503680352a6b91582ea5))
+
+
+### ⚡️ 性能优化
+
+* **issue:** 优化问题和推送信息渲染逻辑 ([92dfacc](https://github.com/CandriaJS/karin-plugin-git/commit/92dfacca0af955941a9da61e4189eef29a6e74fb))
+
 ## [1.1.1](https://github.com/CandriaJS/karin-plugin-git/compare/v1.1.0...v1.1.1) (2025-11-09)
 
 ### 🎡 持续集成
