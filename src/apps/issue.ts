@@ -15,7 +15,7 @@ export const github = karin.task(
   'karin-plugin-git:issue:github',
   Config.github.cron || '0 */5 * * * *',
   async () => {
-    const {token} = Config.github
+    const { token } = Config.github
     if (isEmpty(token)) return logger.warn('未配置GitHub Token, 跳过任务')
     try {
       const client = Client.github()
@@ -23,14 +23,14 @@ export const github = karin.task(
     } catch (e) {
       logger.error(e)
     }
-  }
+  },
 )
 
 export const gitee = karin.task(
   'karin-plugin-git:issue:gitee',
   Config.gitee.cron || '0 */5 * * * *',
   async () => {
-    const {token} = Config.gitee
+    const { token } = Config.gitee
     if (isEmpty(token)) return logger.warn('未配置Gitee Token, 跳过任务')
     try {
       const client = Client.gitee()
@@ -45,7 +45,7 @@ export const gitcode = karin.task(
   'karin-plugin-git:issue:gitcode',
   Config.gitcode.cron || '0 */5 * * * *',
   async () => {
-    const {token} = Config.gitcode
+    const { token } = Config.gitcode
     if (isEmpty(token)) return logger.warn('未配置GitCode Token, 跳过任务')
     try {
       const client = Client.gitcode()
@@ -60,7 +60,7 @@ export const cnb = karin.task(
   'karin-plugin-git:issue:cnb',
   Config.cnb.cron || '0 */5 * * * *',
   async () => {
-    const {token} = Config.cnb
+    const { token } = Config.cnb
     if (isEmpty(token)) return logger.warn('未配置CnbCool Token, 跳过任务')
     try {
       const client = Client.cnb()
@@ -72,11 +72,7 @@ export const cnb = karin.task(
 )
 
 const handleRepoIssue = async (client: ClientType, platform: Platform) => {
-  const all = await db.event.GetAll()
-  const repoInfos = all.filter(
-    (repo) =>
-      repo.platform === platform && repo.eventType.includes(EventType.Issue),
-  )
+  const all = await db.event.GetAll(platform, EventType.Push)
   const groupMap = new Map<
     string,
     Array<{
@@ -90,13 +86,13 @@ const handleRepoIssue = async (client: ClientType, platform: Platform) => {
     }>
   >()
 
-  for (const repo of repoInfos) {
-    const repoInfo = await db.repo.GetRepo(repo.repoId)
-    if (!repoInfo) continue
-    const groupKey = `${repoInfo.botId}-${repoInfo.groupId}`
+  for (const event of all) {
+    const eventRepoInfo = await db.repo.GetRepo(event.repoId)
+    if (!eventRepoInfo) continue
+    const groupKey = `${eventRepoInfo.groupId}-${eventRepoInfo.botId}`
     const issueInfos = await client.getIssueList(
-      repoInfo.owner,
-      repoInfo.repo,
+      eventRepoInfo.owner,
+      eventRepoInfo.repo,
       {
         perPage: 100,
       },
@@ -105,57 +101,50 @@ const handleRepoIssue = async (client: ClientType, platform: Platform) => {
       groupMap.set(groupKey, [])
     }
     for (const issue of issueInfos) {
-      const issueInfo = await db.issue.GetRepo(
-        platform,
-        repo.repoId,
-        issue.number,
-      )
+      let issueInfo = await db.issue.GetRepo(event.id, issue.number)
       if (!issueInfo) {
         await db.issue.AddRepo(
-          platform,
-          repo.repoId,
+          event.id,
           issue.number,
           make_hash(issue.title),
           issue.body ? make_hash(issue.body) : null,
           issue.state,
         )
         groupMap.get(groupKey)!.push({
-          owner: repoInfo.owner,
-          repo: repoInfo.repo,
+          owner: eventRepoInfo.owner,
+          repo: eventRepoInfo.repo,
           title: await Render.markdown(issue.title),
           body: issue.body ? await Render.markdown(issue.body) : null,
           user: issue.user,
           state: issue.state,
           issueDate: formatDate(issue.createdAt),
         })
-      } else {
-        if (
-          issueInfo.state !== issue.state ||
-          issueInfo.title !== make_hash(issue.title) ||
-          issueInfo.body !== (issue.body ? make_hash(issue.body) : null)
-        ) {
-          groupMap.get(groupKey)!.push({
-            owner: repoInfo.owner,
-            repo: repoInfo.repo,
-            title: await Render.markdown(issue.title),
-            body: issue.body ? await Render.markdown(issue.body) : null,
-            user: issue.user,
-            state: issue.state,
-            issueDate: formatDate(issue.createdAt),
-          })
-        }
+        issueInfo = await db.issue.GetRepo(event.id, issue.number)
+      }
+      if (!issueInfo) continue
 
-        await db.issue.UpdateState(
-          platform,
-          repo.repoId,
-          issue.number,
-          issue.state,
-        )
+      if (
+        issueInfo.state !== issue.state ||
+        issueInfo.title !== make_hash(issue.title) ||
+        issueInfo.body !== (issue.body ? make_hash(issue.body) : null)
+      ) {
+        groupMap.get(groupKey)!.push({
+          owner: eventRepoInfo.owner,
+          repo: eventRepoInfo.repo,
+          title: await Render.markdown(issue.title),
+          body: issue.body ? await Render.markdown(issue.body) : null,
+          user: issue.user,
+          state: issue.state,
+          issueDate: formatDate(issue.createdAt),
+        })
+
+        await db.issue.UpdateState(event.id, issue.number, issue.state)
       }
     }
   }
+
   for (const [groupKey, issues] of groupMap) {
-    const [botId, groupId] = groupKey.split('-')
+    const [groupId, botId] = groupKey.split('-')
     let image: ImageElement[] = []
 
     for (const issue of issues) {

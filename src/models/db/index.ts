@@ -49,13 +49,12 @@ export const InitDb = async () => {
   client.exec(`
     CREATE TABLE IF NOT EXISTS push (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      repoId INTEGER NOT NULL,
-      platform TEXT NOT NULL,
+      eventId INTEGER NOT NULL,
       branch TEXT NOT NULL,
       commitSha TEXT,
       createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
       updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
-      FOREIGN KEY (repoId) REFERENCES repo(id) ON DELETE CASCADE
+      FOREIGN KEY (eventId) REFERENCES event(id) ON DELETE CASCADE
     )
   `)
 
@@ -63,15 +62,14 @@ export const InitDb = async () => {
   client.exec(`
     CREATE TABLE IF NOT EXISTS issue (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      repoId INTEGER NOT NULL,
-      platform TEXT NOT NULL,
+      eventId INTEGER NOT NULL,
       issueId TEXT NOT NULL,
       title TEXT,
       body TEXT,
       state TEXT,
       createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
       updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
-      FOREIGN KEY (repoId) REFERENCES repo(id) ON DELETE CASCADE
+      FOREIGN KEY (eventId) REFERENCES event(id) ON DELETE CASCADE
     )
   `)
 
@@ -79,12 +77,8 @@ export const InitDb = async () => {
   client.exec(
     `CREATE INDEX IF NOT EXISTS idx_repo_lookup ON repo(botId, groupId)`,
   )
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_repo ON push(repoId)`)
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_platform ON push(platform)`)
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_issue_repo ON issue(repoId)`)
-  client.exec(
-    `CREATE INDEX IF NOT EXISTS idx_issue_platform ON issue(platform)`,
-  )
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_event ON push(eventId)`)
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_issue_event ON issue(eventId)`)
   client.exec(`CREATE INDEX IF NOT EXISTS idx_event_repo ON event(repoId)`)
   client.exec(
     `CREATE INDEX IF NOT EXISTS idx_event_platform ON event(platform)`,

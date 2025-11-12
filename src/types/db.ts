@@ -12,6 +12,7 @@ export interface RepoInfo {
 }
 
 export interface EventRepo {
+  id: number
   repoId: number
   platform: Platform
   eventType: Array<EventType>
@@ -20,8 +21,7 @@ export interface EventRepo {
 }
 
 export interface PushRepo {
-  repoId: number
-  platform: Platform
+  eventId: number
   branch: string
   commitSha: string
   createAt: Date
@@ -29,8 +29,7 @@ export interface PushRepo {
 }
 
 export interface IssueRepo {
-  repoId: number
-  platform: Platform
+  eventId: number
   issueId: string
   title: string
   body: string

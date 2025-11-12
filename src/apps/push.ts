@@ -81,23 +81,23 @@ export const push = karin.command(
     try {
       const botId = e.selfId
       const groupId = e.groupId
-      const PushInfos = await db.push.GetAll()
+      const all = await db.event.GetAll()
 
       let client: ClientType
       let image: ImageElement[] = []
-      for (const pushInfo of PushInfos) {
-        const RepoInfo = await db.repo.GetRepo(pushInfo.repoId)
-        if (!RepoInfo || RepoInfo.botId != botId || RepoInfo.groupId != groupId)
-          continue
-        if (pushInfo.platform == Platform.Gitee) {
+      for (const event of all) {
+        const RepoInfo = await db.repo.GetRepo(event.repoId)
+        if (!RepoInfo) continue
+
+        if (event.platform == Platform.Gitee) {
           if (isEmpty(Config.gitee.token))
             return await e.reply('未配置Gitee Token, 请先配置Gitee Token')
           client = Client.gitee()
-        } else if (pushInfo.platform == Platform.GitCode) {
+        } else if (event.platform == Platform.GitCode) {
           if (isEmpty(Config.gitcode.token))
             return await e.reply('未配置GitCode Token, 请先配置GitCode Token')
           client = Client.gitcode()
-        } else if (pushInfo.platform == Platform.Cnb) {
+        } else if (event.platform == Platform.Cnb) {
           if (isEmpty(Config.cnb.token))
             return await e.reply('Cnb Token, 请先配置Cnb Token')
           client = Client.cnb()
@@ -107,40 +107,63 @@ export const push = karin.command(
           client = Client.github()
         }
 
-        let commitInfo: CommitInfo
-        try {
-          commitInfo = await client.getCommitInfo(
+        const pushRepoList = await db.push.GetRepo(event.id)
+        for (const pushInfo of pushRepoList) {
+          let commitInfo: CommitInfo
+          try {
+            commitInfo = await client.getCommitInfo(
+              RepoInfo.owner,
+              RepoInfo.repo,
+              pushInfo.branch,
+            )
+          } catch (error) {
+            logger.warn(
+              `获取仓库 ${RepoInfo.owner}/${RepoInfo.repo} 分支 ${pushInfo.branch} 提交信息失败:`,
+              error,
+            )
+            continue
+          }
+
+          const messageParts = commitInfo.commit.message.split('\n')
+          const pushCommitInfo: PushCommitInfo = {
+            ...commitInfo,
+            owner: RepoInfo.owner,
+            repo: RepoInfo.repo,
+            branch: pushInfo.branch,
+            botId: botId,
+            groupId: groupId,
+            title: await Render.markdown(messageParts[0]),
+            body: await Render.markdown(messageParts.slice(1).join('\n')),
+            commitDate: formatDate(commitInfo.commit.committer.date),
+          }
+          const img = await Render.render('commit/index', {
+            commit: pushCommitInfo,
+          })
+          image.push(img)
+        }
+        const issueRepoList = await db.issue.GetRepo(event.id)
+        for (const issue of issueRepoList) {
+          const issueInfo = await client.getIssueInfo(
             RepoInfo.owner,
             RepoInfo.repo,
-            pushInfo.branch,
+            issue.issueId,
           )
-        } catch (error) {
-          logger.warn(
-            `获取仓库 ${RepoInfo.owner}/${RepoInfo.repo} 分支 ${pushInfo.branch} 提交信息失败:`,
-            error,
-          )
-          continue
+          const pushIssueInfo = {
+            owner: RepoInfo.owner,
+            repo: RepoInfo.repo,
+            title: await Render.markdown(issueInfo.title),
+            body: issueInfo.body ? await Render.markdown(issueInfo.body) : null,
+            user: issueInfo.user,
+            state: issueInfo.state,
+            issueDate: formatDate(issueInfo.createdAt),
+          }
+          if (isEmpty(issue)) continue
+          const img = await Render.render('issue/index', {
+            issue: pushIssueInfo,
+          })
+          image.push(img)
         }
-
-        const messageParts = commitInfo.commit.message.split('\n')
-        const pushCommitInfo: PushCommitInfo = {
-          ...commitInfo,
-          owner: RepoInfo.owner,
-          repo: RepoInfo.repo,
-          branch: pushInfo.branch,
-          botId: botId,
-          groupId: groupId,
-          title: await Render.markdown(messageParts[0]),
-          body: await Render.markdown(messageParts.slice(1).join('\n')),
-          commitDate: formatDate(commitInfo.commit.committer.date),
-        }
-
-        const img = await Render.render('commit/index', {
-          commit: pushCommitInfo,
-        })
-        image.push(img)
       }
-
       if (image.length > 0) {
         await sendImage(botId, groupId, image)
       }
@@ -157,14 +180,9 @@ export const push = karin.command(
 )
 
 const handleRepoPush = async (client: ClientType, platform: Platform) => {
-  const all = await db.event.GetAll()
+  const all = await db.event.GetAll(platform, EventType.Push)
 
   if (isEmpty(all)) return
-
-  const repoInfos = all.filter(
-    (repo) =>
-      repo.platform === platform && repo.eventType.includes(EventType.Push),
-  )
 
   const groupMap = new Map<
     string,
@@ -175,36 +193,43 @@ const handleRepoPush = async (client: ClientType, platform: Platform) => {
     }>
   >()
 
-  for (const repo of repoInfos) {
-    const pushRepoList = (await db.push.GetAll()).filter(
-      (pushRepo) => pushRepo.repoId === repo.repoId,
-    )
-    if (!pushRepoList.length) continue
-
+  for (const event of all) {
+    const eventRepoInfo = await db.repo.GetRepo(event.repoId)
+    if (!eventRepoInfo) continue
+    const groupKey = `${eventRepoInfo.groupId}-${eventRepoInfo.botId}`
+    let pushRepoList = await db.push.GetRepo(event.id)
+    if (isEmpty(pushRepoList)) {
+      const { defaultBranch } = await client.getRepoInfo(
+        eventRepoInfo.owner,
+        eventRepoInfo.repo,
+      )
+      await db.push.AddRepo(event.id, defaultBranch)
+      pushRepoList = await db.push.GetRepo(event.repoId)
+    }
     for (const pushRepo of pushRepoList) {
-      const pushRepoInfo = await db.repo.GetRepo(pushRepo.repoId)
-      if (!pushRepoInfo) continue
-
       const commitInfo = await client.getCommitInfo(
-        pushRepoInfo.owner,
-        pushRepoInfo.repo,
+        eventRepoInfo.owner,
+        eventRepoInfo.repo,
         pushRepo.branch,
       )
       if (!commitInfo || commitInfo.sha === pushRepo.commitSha) continue
-      const groupKey = `${pushRepoInfo.botId}-${pushRepoInfo.groupId}`
       if (!groupMap.has(groupKey)) {
         groupMap.set(groupKey, [])
       }
       groupMap.get(groupKey)!.push({
         pushRepo,
-        pushRepoInfo,
+        pushRepoInfo: eventRepoInfo,
         commitInfo,
       })
+      await db.push.UpdateCommitSha(
+        pushRepo.eventId,
+        pushRepo.branch,
+        commitInfo.sha,
+      )
     }
   }
-
   for (const [groupKey, items] of groupMap.entries()) {
-    const [botId, groupId] = groupKey.split('-')
+    const [groupId, botId] = groupKey.split('-')
     let image: ImageElement[] = []
 
     for (const item of items) {
@@ -225,13 +250,6 @@ const handleRepoPush = async (client: ClientType, platform: Platform) => {
         commit: pushInfo,
       })
       image.push(img)
-
-      await db.push.UpdateCommitSha(
-        platform,
-        item.pushRepo.repoId,
-        item.pushRepo.branch,
-        item.commitInfo.sha,
-      )
     }
 
     if (image.length > 0) {

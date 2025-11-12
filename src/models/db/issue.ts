@@ -1,12 +1,11 @@
 import { StateType } from 'nipaw'
 import { createClient } from './index'
-import { Platform, IssueRepo } from '@/types'
+import { IssueRepo } from '@/types'
 
-export async function AddRepo(platform: Platform, repoId: number): Promise<void>
+export async function AddRepo(eventId: number): Promise<void>
 
 export async function AddRepo(
-  platform: Platform,
-  repoId: number,
+  eventId: number,
   issueId: string,
   title: string,
   body: string | null,
@@ -14,8 +13,7 @@ export async function AddRepo(
 ): Promise<void>
 
 export async function AddRepo(
-  platform: Platform,
-  repoId: number,
+  eventId: number,
   issueId?: string,
   title?: string,
   body?: string | null,
@@ -30,14 +28,11 @@ export async function AddRepo(
     state !== undefined
   ) {
     await client.run(
-      'INSERT INTO issue (platform, repoId, issueId, title, body, state) VALUES (?, ?, ?, ?, ?, ?)',
-      [platform, repoId, issueId, title, body, state],
+      'INSERT INTO issue (eventId, issueId, title, body, state) VALUES (?, ?, ?, ?, ?)',
+      [eventId, issueId, title, body, state],
     )
   } else {
-    await client.run('INSERT INTO issue (platform, repoId) VALUES (?, ?)', [
-      platform,
-      repoId,
-    ])
+    await client.run('INSERT INTO issue (eventId) VALUES (?)', [eventId])
   }
 }
 
@@ -45,80 +40,67 @@ export async function GetAll(): Promise<IssueRepo[]> {
   let client = await createClient()
 
   return await new Promise<IssueRepo[]>((resolve, reject) => {
-      client.all('SELECT * FROM issue', [], (err, rows) => {
-        if (err) reject(err)
-        else resolve(rows as IssueRepo[])
-      })
-    });
-
+    client.all('SELECT * FROM issue', [], (err, rows) => {
+      if (err) reject(err)
+      else resolve(rows as IssueRepo[])
+    })
+  })
 }
 
-export async function GetRepo(
-  platform: Platform,
-  repoId: number,
-): Promise<IssueRepo[]>
+export async function GetRepo(eventId: number): Promise<IssueRepo[]>
 
 export async function GetRepo(
-  platform: Platform,
-  repoId: number,
+  eventId: number,
   issueId: string,
 ): Promise<IssueRepo | null>
 
 export async function GetRepo(
-  platform: Platform,
-  repoId: number,
+  eventId: number,
   issueId?: string,
 ): Promise<IssueRepo[] | IssueRepo | null> {
   let client = await createClient()
   if (issueId != undefined) {
     return await new Promise<IssueRepo | null>((resolve, reject) => {
-          client.get(
-            'SELECT * FROM issue WHERE platform = ? AND repoId = ? AND issueId = ?',
-            [platform, repoId, issueId],
-            (err, rows) => {
-              if (err) reject(err)
-              else resolve(rows as unknown as IssueRepo | null)
-            },
-          )
-        });
-
+      client.get(
+        'SELECT * FROM issue WHERE eventId = ? AND issueId = ?',
+        [eventId, issueId],
+        (err, rows) => {
+          if (err) reject(err)
+          else resolve(rows as unknown as IssueRepo | null)
+        },
+      )
+    })
   } else {
     return await new Promise<IssueRepo[]>((resolve, reject) => {
-          client.all(
-            'SELECT * FROM issue WHERE platform = ? AND repoId = ?',
-            [platform, repoId],
-            (err, rows) => {
-              if (err) reject(err)
-              else resolve(rows as IssueRepo[])
-            },
-          )
-        });
-
+      client.all(
+        'SELECT * FROM issue WHERE eventId = ?',
+        [eventId],
+        (err, rows) => {
+          if (err) reject(err)
+          else resolve(rows as IssueRepo[])
+        },
+      )
+    })
   }
 }
 
-export async function RemoveRepo(
-  platform: Platform,
-  repoId: number,
-): Promise<void>
+export async function RemoveRepo(eventId: number): Promise<void>
 
 export async function RemoveRepo(
-  platform: Platform,
-  repoId: number,
+  eventId: number,
   issueId: string,
 ): Promise<void>
 
 export async function RemoveRepo(
-  platform: Platform,
-  repoId: number,
+  eventId: number,
   issueId?: string,
 ): Promise<void> {
   let client = await createClient()
   if (issueId != undefined) {
     await new Promise<void>((resolve, reject) => {
       client.run(
-        'DELETE FROM issue WHERE platform = ? AND repoId = ? AND issueId = ?',
-        [platform, repoId, issueId],
+        'DELETE FROM issue WHERE eventId = ? AND issueId = ?',
+        [eventId, issueId],
         (err) => {
           if (err) reject(err)
           else resolve()
@@ -127,29 +109,24 @@ export async function RemoveRepo(
     })
   } else {
     await new Promise<void>((resolve, reject) => {
-      client.run(
-        'DELETE FROM issue WHERE platform = ? AND repoId = ?',
-        [platform, repoId],
-        (err) => {
-          if (err) reject(err)
-          else resolve()
-        },
-      )
+      client.run('DELETE FROM issue WHERE eventId = ?', [eventId], (err) => {
+        if (err) reject(err)
+        else resolve()
+      })
     })
   }
 }
 
 export async function UpdateState(
-  platform: Platform,
-  repoId: number,
+  eventId: number,
   issueId: string,
   state: StateType,
 ) {
   let client = await createClient()
   await new Promise<void>((resolve, reject) => {
     client.run(
-      'UPDATE issue SET state = ? WHERE platform = ? AND repoId = ? AND issueId = ?',
-      [state, platform, repoId, issueId],
+      'UPDATE issue SET state = ? WHERE eventId = ? AND issueId = ?',
+      [state, eventId, issueId],
       (err) => {
         if (err) reject(err)
         else resolve()
