@@ -15,7 +15,7 @@ export const github = karin.task(
   'karin-plugin-git:issue:github',
   Config.github.cron || '0 */5 * * * *',
   async () => {
-    const token = Config.github.token
+    const {token} = Config.github
     if (isEmpty(token)) return logger.warn('未配置GitHub Token, 跳过任务')
     try {
       const client = Client.github()
