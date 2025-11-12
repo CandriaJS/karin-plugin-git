@@ -28,42 +28,36 @@ export async function GetAll(
   eventType?: EventType,
 ): Promise<Array<EventRepo>> {
   let client = await createClient()
-  let result: Array<EventRepo>
-  if (platform) {
-    result = await new Promise<Array<EventRepo>>((resolve, reject) => {
-      client.all(
-        'SELECT * FROM event WHERE platform = ?',
-        [platform],
-        (err, rows) => {
-          if (err) reject(err)
-          else resolve(rows as Array<EventRepo>)
-        },
-      )
-    })
-  } else if (eventType) {
-    result = await new Promise<Array<EventRepo>>((resolve, reject) => {
-      client.all(
-        'SELECT * FROM event WHERE eventType = ?',
-        [eventType],
-        (err, rows) => {
-          if (err) reject(err)
-          else resolve(rows as Array<EventRepo>)
-        },
-      )
-    })
-  } else {
-    result = await new Promise<Array<EventRepo>>((resolve, reject) => {
-      client.all('SELECT * FROM event', [], (err, rows) => {
-        if (err) reject(err)
-        else resolve(rows as Array<EventRepo>)
-      })
-    })
+
+  let query = 'SELECT * FROM event'
+  const params: (Platform | EventType | string)[] = []
+
+  if (platform !== undefined) {
+    query += ' WHERE platform = ?'
+    params.push(platform)
+
+    if (eventType !== undefined) {
+      query += ' AND eventType = ?'
+      params.push(eventType)
+    }
+  } else if (eventType !== undefined) {
+    query += ' WHERE eventType = ?'
+    params.push(eventType)
   }
+
+  const result = await new Promise<Array<EventRepo>>((resolve, reject) => {
+    client.all(query, params, (err, rows) => {
+      if (err) reject(err)
+      else resolve(rows as Array<EventRepo>)
+    })
+  })
+
   result.forEach((item) => {
     item.eventType = (item.eventType as unknown as string).split(
       ',',
     ) as Array<EventType>
   })
+
   return result
 }
 

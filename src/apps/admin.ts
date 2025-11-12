@@ -94,10 +94,11 @@ export const AddRepo = karin.command(
         msg = `仓库 ${owner}/${repo} 的议题订阅已存在, 平台: ${platformName}`
       }
     }
+    console.log(PushEvent, IssueEvent)
 
-    if (!(PushEvent || IssueEvent)) {
-      await e.reply(
-        `添加订阅仓库失败, 订阅类型: ${eventType.join(',')}, 请检查订阅类型是否正确, 支持事件类型: push, issue`,
+    if (!PushEvent || !IssueEvent) {
+      return await e.reply(
+        `添加订阅仓库失败, 请检查订阅类型是否正确, 支持事件类型: push, issue`,
       )
     }
     await e.reply(msg)
@@ -161,14 +162,16 @@ export const RemoveRepo = karin.command(
     if (IssueEvent) {
       const event = eventInfo.eventType.filter((e) => e !== EventType.Issue)
       await db.event.UpdateEventType(platformName, repoInfo.id, event)
-      const issueRepo = await db.issue.GetRepo(repoInfo.id)
+      const issueRepo = await db.issue.GetRepo(eventInfo.id)
       if (!issueRepo) {
         return await e.reply('议题订阅不存在，删除失败')
       }
       await db.issue.RemoveRepo(eventInfo.id)
     }
-    if (!(PushEvent || IssueEvent)) {
-      return await e.reply('未找到该订阅事件, 删除失败,请重试')
+    if (!PushEvent || !IssueEvent) {
+      return await e.reply(
+        `添加订阅仓库失败, 请检查订阅类型是否正确, 支持事件类型: push, issue`,
+      )
     }
 
     await e.reply(
