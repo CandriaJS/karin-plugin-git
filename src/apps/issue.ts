@@ -145,14 +145,16 @@ const handleRepoIssue = async (client: ClientType, platform: Platform) => {
 
   for (const [groupKey, issues] of groupMap) {
     const [groupId, botId] = groupKey.split('-')
-    let image: ImageElement[] = []
+    const imagePromises = issues.map(async (issue) => {
+      const issueImage = await Render.render('issue/index', { issue })
+      return issueImage
+    })
 
-    for (const issue of issues) {
-      const img = await Render.render('issue/index', {
-        issue: issue,
+    const image = (await Promise.allSettled(imagePromises))
+      .filter((result): result is PromiseFulfilledResult<ImageElement> => {
+        return result.status === 'fulfilled' && result.value !== null
       })
-      image.push(img)
-    }
+      .map((result) => result.value)
     if (image.length > 0) {
       await sendImage(botId, groupId, image)
     }

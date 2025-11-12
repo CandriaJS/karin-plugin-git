@@ -108,41 +108,51 @@ export const push = karin.command(
         }
 
         const pushRepoList = await db.push.GetRepo(event.id)
-        for (const pushInfo of pushRepoList) {
-          let commitInfo: CommitInfo
+        const pushImagePromises = pushRepoList.map(async (pushInfo) => {
           try {
-            commitInfo = await client.getCommitInfo(
+            const commitInfo = await client.getCommitInfo(
               RepoInfo.owner,
               RepoInfo.repo,
               pushInfo.branch,
             )
+
+            const messageParts = commitInfo.commit.message.split('\n')
+            const pushCommitInfo: PushCommitInfo = {
+              ...commitInfo,
+              owner: RepoInfo.owner,
+              repo: RepoInfo.repo,
+              branch: pushInfo.branch,
+              botId: botId,
+              groupId: groupId,
+              title: await Render.markdown(messageParts[0]),
+              body: await Render.markdown(messageParts.slice(1).join('\n')),
+              commitDate: formatDate(commitInfo.commit.committer.date),
+            }
+
+            return await Render.render('commit/index', {
+              commit: pushCommitInfo,
+            })
           } catch (error) {
             logger.warn(
               `获取仓库 ${RepoInfo.owner}/${RepoInfo.repo} 分支 ${pushInfo.branch} 提交信息失败:`,
               error,
             )
-            continue
+            return null
           }
-
-          const messageParts = commitInfo.commit.message.split('\n')
-          const pushCommitInfo: PushCommitInfo = {
-            ...commitInfo,
-            owner: RepoInfo.owner,
-            repo: RepoInfo.repo,
-            branch: pushInfo.branch,
-            botId: botId,
-            groupId: groupId,
-            title: await Render.markdown(messageParts[0]),
-            body: await Render.markdown(messageParts.slice(1).join('\n')),
-            commitDate: formatDate(commitInfo.commit.committer.date),
-          }
-          const img = await Render.render('commit/index', {
-            commit: pushCommitInfo,
-          })
-          image.push(img)
-        }
+        })
+        const pushImages = (await Promise.allSettled(pushImagePromises))
+          .filter(
+            (result): result is PromiseFulfilledResult<ImageElement | null> =>
+              result.status === 'fulfilled',
+          )
+          .map((result) => result.value)
+          .filter((img): img is ImageElement => img !== null)
+        image.push(...pushImages)
         const issueRepoList = await db.issue.GetRepo(event.id)
-        for (const issue of issueRepoList) {
+
+        const issueImagePromises = issueRepoList.map(async (issue) => {
+          if (isEmpty(issue)) return null
+
           const issueInfo = await client.getIssueInfo(
             RepoInfo.owner,
             RepoInfo.repo,
@@ -157,12 +167,20 @@ export const push = karin.command(
             state: issueInfo.state,
             issueDate: formatDate(issueInfo.createdAt),
           }
-          if (isEmpty(issue)) continue
-          const img = await Render.render('issue/index', {
+
+          return await Render.render('issue/index', {
             issue: pushIssueInfo,
           })
-          image.push(img)
-        }
+        })
+
+        const issueImages = (await Promise.allSettled(issueImagePromises))
+          .filter(
+            (result): result is PromiseFulfilledResult<ImageElement | null> =>
+              result.status === 'fulfilled',
+          )
+          .map((result) => result.value)
+          .filter((img): img is ImageElement => img !== null)
+        image.push(...issueImages)
       }
       if (image.length > 0) {
         await sendImage(botId, groupId, image)
@@ -230,9 +248,8 @@ const handleRepoPush = async (client: ClientType, platform: Platform) => {
   }
   for (const [groupKey, items] of groupMap.entries()) {
     const [groupId, botId] = groupKey.split('-')
-    let image: ImageElement[] = []
 
-    for (const item of items) {
+    const imagePromises = items.map(async (item) => {
       const messageParts = item.commitInfo.commit.message.split('\n')
       const pushInfo: PushCommitInfo = {
         ...item.commitInfo,
@@ -246,11 +263,16 @@ const handleRepoPush = async (client: ClientType, platform: Platform) => {
         commitDate: formatDate(item.commitInfo.commit.committer.date),
       }
 
-      const img = await Render.render('commit/index', {
+      return await Render.render('commit/index', {
         commit: pushInfo,
       })
-      image.push(img)
-    }
+    })
+
+    const image = (await Promise.allSettled(imagePromises))
+      .filter((result): result is PromiseFulfilledResult<ImageElement> => {
+        return result.status === 'fulfilled' && result.value !== null
+      })
+      .map((result) => result.value)
 
     if (image.length > 0) {
       await sendImage(botId, groupId, image)
