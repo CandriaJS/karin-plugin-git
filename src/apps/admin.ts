@@ -54,7 +54,7 @@ export const AddRepo = karin.command(
     if (eventType.includes(EventType.Push)) {
       const PushBranch = branch || 'main'
       const pushRepo = await db.push.GetRepo(
-        Platform.GitHub,
+        platformName,
         repoInfo.id,
         PushBranch,
       )
