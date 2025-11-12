@@ -30,7 +30,7 @@ export const gitee = karin.task(
   'karin-plugin-git:issue:gitee',
   Config.gitee.cron || '0 */5 * * * *',
   async () => {
-    const token = Config.gitee.token
+    const {token} = Config.gitee
     if (isEmpty(token)) return logger.warn('未配置Gitee Token, 跳过任务')
     try {
       const client = Client.gitee()
@@ -45,7 +45,7 @@ export const gitcode = karin.task(
   'karin-plugin-git:issue:gitcode',
   Config.gitcode.cron || '0 */5 * * * *',
   async () => {
-    const token = Config.gitcode.token
+    const {token} = Config.gitcode
     if (isEmpty(token)) return logger.warn('未配置GitCode Token, 跳过任务')
     try {
       const client = Client.gitcode()
@@ -60,7 +60,7 @@ export const cnb = karin.task(
   'karin-plugin-git:issue:cnb',
   Config.cnb.cron || '0 */5 * * * *',
   async () => {
-    const token = Config.cnb.token
+    const {token} = Config.cnb
     if (isEmpty(token)) return logger.warn('未配置CnbCool Token, 跳过任务')
     try {
       const client = Client.cnb()

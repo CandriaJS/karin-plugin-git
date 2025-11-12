@@ -44,13 +44,13 @@ export async function AddRepo(
 export async function GetAll(): Promise<IssueRepo[]> {
   let client = await createClient()
 
-  const result = await new Promise<IssueRepo[]>((resolve, reject) => {
-    client.all('SELECT * FROM issue', [], (err, rows) => {
-      if (err) reject(err)
-      else resolve(rows as IssueRepo[])
-    })
-  })
-  return result
+  return await new Promise<IssueRepo[]>((resolve, reject) => {
+      client.all('SELECT * FROM issue', [], (err, rows) => {
+        if (err) reject(err)
+        else resolve(rows as IssueRepo[])
+      })
+    });
+
 }
 
 export async function GetRepo(
@@ -71,29 +71,29 @@ export async function GetRepo(
 ): Promise<IssueRepo[] | IssueRepo | null> {
   let client = await createClient()
   if (issueId != undefined) {
-    const result = await new Promise<IssueRepo | null>((resolve, reject) => {
-      client.get(
-        'SELECT * FROM issue WHERE platform = ? AND repoId = ? AND issueId = ?',
-        [platform, repoId, issueId],
-        (err, rows) => {
-          if (err) reject(err)
-          else resolve(rows as unknown as IssueRepo | null)
-        },
-      )
-    })
-    return result
+    return await new Promise<IssueRepo | null>((resolve, reject) => {
+          client.get(
+            'SELECT * FROM issue WHERE platform = ? AND repoId = ? AND issueId = ?',
+            [platform, repoId, issueId],
+            (err, rows) => {
+              if (err) reject(err)
+              else resolve(rows as unknown as IssueRepo | null)
+            },
+          )
+        });
+
   } else {
-    const result = await new Promise<IssueRepo[]>((resolve, reject) => {
-      client.all(
-        'SELECT * FROM issue WHERE platform = ? AND repoId = ?',
-        [platform, repoId],
-        (err, rows) => {
-          if (err) reject(err)
-          else resolve(rows as IssueRepo[])
-        },
-      )
-    })
-    return result
+    return await new Promise<IssueRepo[]>((resolve, reject) => {
+          client.all(
+            'SELECT * FROM issue WHERE platform = ? AND repoId = ?',
+            [platform, repoId],
+            (err, rows) => {
+              if (err) reject(err)
+              else resolve(rows as IssueRepo[])
+            },
+          )
+        });
+
   }
 }
 
