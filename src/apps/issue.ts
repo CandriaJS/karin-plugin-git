@@ -120,9 +120,16 @@ const handleRepoIssue = async (client: ClientType, platform: Platform) => {
           issueDate: formatDate(issue.createdAt),
         })
         issueInfo = await db.issue.GetRepo(event.id, issue.number)
+        logger.debug(
+          `[karin-plugin-git] 平台: ${event.platform} 仓库:${eventRepoInfo.owner}/${eventRepoInfo.repo} 议题变更`,
+        )
       }
-      if (!issueInfo) continue
-
+      if (!issueInfo) {
+        logger.debug(
+          `[karin-plugin-git] 平台: ${event.platform} 仓库:${eventRepoInfo.owner}/${eventRepoInfo.repo} 议题无变更`,
+        )
+        continue
+      }
       if (
         issueInfo.state !== issue.state ||
         issueInfo.title !== make_hash(issue.title) ||
@@ -137,7 +144,9 @@ const handleRepoIssue = async (client: ClientType, platform: Platform) => {
           state: issue.state,
           issueDate: formatDate(issue.createdAt),
         })
-
+        logger.debug(
+          `[karin-plugin-git] 平台: ${event.platform} 仓库:${eventRepoInfo.owner}/${eventRepoInfo.repo} 议题变更`,
+        )
         await db.issue.UpdateState(event.id, issue.number, issue.state)
       }
     }

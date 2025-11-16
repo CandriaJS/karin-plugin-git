@@ -230,7 +230,12 @@ const handleRepoPush = async (client: ClientType, platform: Platform) => {
         eventRepoInfo.repo,
         pushRepo.branch,
       )
-      if (!commitInfo || commitInfo.sha === pushRepo.commitSha) continue
+      if (!commitInfo || commitInfo.sha === pushRepo.commitSha) {
+        logger.debug(
+          `[karin-plugin-git] 平台: ${event.platform} 仓库:${eventRepoInfo.owner}/${eventRepoInfo.repo} 分支: ${pushRepo.branch} 提交信息无变更`,
+        )
+        continue
+      }
       if (!groupMap.has(groupKey)) {
         groupMap.set(groupKey, [])
       }
@@ -239,6 +244,9 @@ const handleRepoPush = async (client: ClientType, platform: Platform) => {
         pushRepoInfo: eventRepoInfo,
         commitInfo,
       })
+      logger.debug(
+        `[karin-plugin-git] 平台: ${event.platform} 仓库:${eventRepoInfo.owner}/${eventRepoInfo.repo} 分支: ${pushRepo.branch} 提交信息变更`,
+      )
       await db.push.UpdateCommitSha(
         pushRepo.eventId,
         pushRepo.branch,
