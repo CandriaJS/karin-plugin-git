@@ -1,5 +1,12 @@
 # 变更日志
 
+## [1.3.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.2.0...v1.3.0) (2025-11-16)
+
+
+### ✨ 新功能
+
+* **git:** 添加议题和提交变更的日志记录功能 ([cb7622b](https://github.com/CandriaJS/karin-plugin-git/commit/cb7622b875d7074137eb9ac52cf0a7ee18fd5121))
+
 ## [1.2.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.1.1...v1.2.0) (2025-11-12)
 
 
