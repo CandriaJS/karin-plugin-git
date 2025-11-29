@@ -5,7 +5,7 @@ import { isEmpty } from 'es-toolkit/compat'
 import karin from 'node-karin'
 
 export const AddRepo = karin.command(
-  /^#?git(?:添加|add)([^\s]+)?订阅仓库([^/\s]+)\/([^:\s]+)(?::([^/\s]+))?\s+([^/\s]+)?$/i,
+  /^#?git(?:添加|add)([^\s]+)?订阅仓库([^/\s]+)\/([^:\s]+)(?::([^/\s]+))?(?:\s+([^/\s]+))?$/i,
   async (e) => {
     const [, platform, owner, repo, branch, event] = e.msg.match(AddRepo!.reg)!
 
@@ -57,13 +57,13 @@ export const AddRepo = karin.command(
       return await e.reply('添加仓库订阅事件失败，请重试')
     }
 
-    let msg = `添加订阅仓库成功, 平台: ${platformName}, 仓库: ${owner}/${repo}, 订阅类型: ${event}`
+    let msg = `添加订阅仓库成功, 平台: ${platformName}, 仓库: ${owner}/${repo}, 订阅类型: ${eventType.join(',')}`
 
     const PushEvent = eventType.includes(EventType.Push)
     if (PushEvent) {
       const PushBranch =
         branch || (await client.getRepoInfo(owner, repo)).defaultBranch
-      const pushRepo = await db.push.GetRepo(repoInfo.id, PushBranch)
+      const pushRepo = await db.push.GetRepo(eventInfo.id, PushBranch)
       if (!pushRepo) {
         await db.push.AddRepo(eventInfo.id, PushBranch)
         msg += `, 分支: ${PushBranch}`
@@ -96,11 +96,6 @@ export const AddRepo = karin.command(
     }
     console.log(PushEvent, IssueEvent)
 
-    if (!PushEvent || !IssueEvent) {
-      return await e.reply(
-        `添加订阅仓库失败, 请检查订阅类型是否正确, 支持事件类型: push, issue`,
-      )
-    }
     await e.reply(msg)
   },
   {
@@ -112,7 +107,7 @@ export const AddRepo = karin.command(
 )
 
 export const RemoveRepo = karin.command(
-  /^#?git(?:移除|删除|remove)([^\s]+)?订阅仓库([^/\s]+)\/([^:\s]+)(?::([^/\s]+))?\s+([^/\s]+)?$/i,
+  /^#?git(?:移除|删除|remove)([^\s]+)?订阅仓库([^/\s]+)\/([^:\s]+)(?::([^/\s]+))?(?:\s+([^/\s]+))?$/i,
   async (e) => {
     const [, platform, owner, repo, branch, event] = e.msg.match(
       RemoveRepo!.reg,
@@ -167,11 +162,6 @@ export const RemoveRepo = karin.command(
         return await e.reply('议题订阅不存在，删除失败')
       }
       await db.issue.RemoveRepo(eventInfo.id)
-    }
-    if (!PushEvent || !IssueEvent) {
-      return await e.reply(
-        `添加订阅仓库失败, 请检查订阅类型是否正确, 支持事件类型: push, issue`,
-      )
     }
 
     await e.reply(

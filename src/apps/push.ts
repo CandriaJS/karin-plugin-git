@@ -296,7 +296,7 @@ const sendImage = async (
   const bot = getBot(botId)
   const contact = await contactGroup(groupId)
 
-  if (image.length > 1) {
+  if (image.length > 3) {
     const res = await common.makeForward(image, botId, bot?.account.name)
     await bot?.sendForwardMsg(contact, res, {
       source: '仓库推送合集',
