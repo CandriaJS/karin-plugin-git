@@ -2,7 +2,7 @@ import path from 'node:path'
 import { full as emoji } from 'markdown-it-emoji'
 import { tasklist } from '@mdit/plugin-tasklist'
 import karin, { segment } from 'node-karin'
-
+import * as component from '@puniyu/component'
 import { Version } from '@/root'
 import MarkdownIt from 'markdown-it'
 
@@ -67,6 +67,7 @@ const Render = {
     md.renderer.rules.bullet_list_open = () => '<ul style="list-style: none;">'
     return Promise.resolve(md.render(markdown))
   },
+  help: component.help
 }
 
 export { Render }

@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@mdit/plugin-tasklist": "^0.22.2",
+    "@puniyu/component": "^0.6.0",
     "dayjs": "^1.11.19",
     "es-toolkit": "^1.41.0",
     "markdown-it": "^14.1.0",
