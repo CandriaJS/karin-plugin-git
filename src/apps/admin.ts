@@ -61,8 +61,9 @@ export const AddRepo = karin.command(
 
     const PushEvent = eventType.includes(EventType.Push)
     if (PushEvent) {
+      const repoClient = client.repo()
       const PushBranch =
-        branch || (await client.getRepoInfo(owner, repo)).defaultBranch
+        branch || (await repoClient.info({ owner, repo })).defaultBranch
       const pushRepo = await db.push.GetRepo(eventInfo.id, PushBranch)
       if (!pushRepo) {
         await db.push.AddRepo(eventInfo.id, PushBranch)
@@ -76,9 +77,13 @@ export const AddRepo = karin.command(
     if (IssueEvent) {
       const IssueRepo = await db.issue.GetRepo(eventInfo.id)
       if (!IssueRepo.length) {
-        const issueInfoList = await client.getIssueList(owner, repo, {
-          perPage: 100,
-        })
+        const issueClient = client.issue()
+        const issueInfoList = await issueClient.list(
+          { owner, repo },
+          {
+            perPage: 100,
+          },
+        )
         if (isEmpty(issueInfoList))
           return await e.reply('添加议题订阅失败，请重试')
         for (const issueInfo of issueInfoList) {

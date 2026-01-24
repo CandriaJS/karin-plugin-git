@@ -110,9 +110,12 @@ export const push = karin.command(
         const pushRepoList = await db.push.GetRepo(event.id)
         const pushImagePromises = pushRepoList.map(async (pushInfo) => {
           try {
-            const commitInfo = await client.getCommitInfo(
-              RepoInfo.owner,
-              RepoInfo.repo,
+            const commitClient = client.commit()
+            const commitInfo = await commitClient.info(
+              {
+                owner: RepoInfo.owner,
+                repo: RepoInfo.repo,
+              },
               pushInfo.branch,
             )
 
@@ -152,10 +155,12 @@ export const push = karin.command(
 
         const issueImagePromises = issueRepoList.map(async (issue) => {
           if (isEmpty(issue)) return null
-
-          const issueInfo = await client.getIssueInfo(
-            RepoInfo.owner,
-            RepoInfo.repo,
+          const issueClient = client.issue()
+          const issueInfo = await issueClient.info(
+            {
+              owner: RepoInfo.owner,
+              repo: RepoInfo.repo,
+            },
             issue.issueId,
           )
           const pushIssueInfo = {
@@ -217,17 +222,21 @@ const handleRepoPush = async (client: ClientType, platform: Platform) => {
     const groupKey = `${eventRepoInfo.groupId}-${eventRepoInfo.botId}`
     let pushRepoList = await db.push.GetRepo(event.id)
     if (isEmpty(pushRepoList)) {
-      const { defaultBranch } = await client.getRepoInfo(
-        eventRepoInfo.owner,
-        eventRepoInfo.repo,
-      )
+      const repoClient = client.repo()
+      const { defaultBranch } = await repoClient.info({
+        owner: eventRepoInfo.owner,
+        repo: eventRepoInfo.repo,
+      })
       await db.push.AddRepo(event.id, defaultBranch)
       pushRepoList = await db.push.GetRepo(event.repoId)
     }
     for (const pushRepo of pushRepoList) {
-      const commitInfo = await client.getCommitInfo(
-        eventRepoInfo.owner,
-        eventRepoInfo.repo,
+      const commitClient = client.commit()
+      const commitInfo = await commitClient.info(
+        {
+          owner: eventRepoInfo.owner,
+          repo: eventRepoInfo.repo,
+        },
         pushRepo.branch,
       )
       if (!commitInfo || commitInfo.sha === pushRepo.commitSha) {

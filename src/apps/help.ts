@@ -1,5 +1,4 @@
-import MarkdownIt from 'markdown-it'
-import karin, { Message, requireFile, segment } from 'node-karin'
+import karin, { Message, segment } from 'node-karin'
 
 import { Render } from '@/common'
 import { Version } from '@/root'
@@ -72,27 +71,6 @@ export const help = karin.command(
   },
   {
     name: 'karin-plugin-git:help',
-    priority: 500,
-    event: 'message',
-    permission: 'all',
-  },
-)
-
-export const version = karin.command(
-  /^#?(?:(git))(?:版本|版本信息|version|versioninfo)$/i,
-  async (e: Message) => {
-    const md = new MarkdownIt({ html: true })
-    const makdown = md.render(
-      await requireFile(`${Version.Plugin_Path}/CHANGELOG.md`),
-    )
-    const img = await Render.render('help/version-info', {
-      Markdown: makdown,
-    })
-    await e.reply(img)
-    return true
-  },
-  {
-    name: 'karin-plugin-git:version',
     priority: 500,
     event: 'message',
     permission: 'all',

@@ -27,8 +27,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       nipaw:
-        specifier: npm:@puniyu/nipaw@^1.8.0
-        version: '@puniyu/nipaw@1.8.0'
+        specifier: npm:@puniyu/nipaw@^1.9.2
+        version: '@puniyu/nipaw@1.9.2'
     devDependencies:
       '@karinjs/plugin-puppeteer':
         specifier: ^1.0.21
@@ -574,41 +574,41 @@ packages:
     resolution: {integrity: sha512-iDZrjzVMmNCsCC5AXFk4D3C9XJfWpVwJpiYObZUWQk8yLBOYCshUVITNOVTZKp1xwwC0U99MuOmrpLPEjzRdPg==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
-  '@puniyu/nipaw-darwin-arm64@1.8.0':
-    resolution: {integrity: sha512-sZN4UZuvUZK3i+i7dbeveWeMfmnQCIyCFQt09vYKCPYDsjJIb7AqQ0itLyXz4wI+D7TLS0AOVjzYiaCUKgTiCQ==}
-    engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
+  '@puniyu/nipaw-darwin-arm64@1.9.2':
+    resolution: {integrity: sha512-8KatlGFgHiFK8v13iSIIEJnvzbjPZTPIV37Xu5iyA7DeeFk81BSlO9Yggu7aLaVpwl2bwPFo23OAE6jmxmm04A==}
+    engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [darwin]
 
-  '@puniyu/nipaw-darwin-x64@1.8.0':
-    resolution: {integrity: sha512-GxandGndiMu3XByYNRFEzm26P317uqovQFsxsOVwqUy4qZ0chGgi3+ghCkmGPkv1TUOJ70cmwrzHEttgetzHpA==}
-    engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
+  '@puniyu/nipaw-darwin-x64@1.9.2':
+    resolution: {integrity: sha512-i2ulg8djOE5q/A+kwtbz6CrOAldx8QM3txe+QxamPHkijWv/ylk3EUL2PX+CMt2CBTUtTemGETnSZ/Fv+CAQQA==}
+    engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [darwin]
 
-  '@puniyu/nipaw-linux-arm64-gnu@1.8.0':
-    resolution: {integrity: sha512-riX8af906s2t6IoHjcl1p194bZbmcvpAxy7aHDy9dNF3FFnBsbpB0CafX8ayLiZv35gjvdnv1o4lINJQywvoTA==}
-    engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
+  '@puniyu/nipaw-linux-arm64-gnu@1.9.2':
+    resolution: {integrity: sha512-2KYpK3ZSjEzhvgt1dAr3Q+qImQjLDSW3QsQDFz49X7IokCEGT/QObaW01tn3N1ol3wBZldtEZMnLscSXfVTmHg==}
+    engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@puniyu/nipaw-linux-x64-gnu@1.8.0':
-    resolution: {integrity: sha512-Y7eTAt1c9NQ1dBNnse6PTjv0Eo+hi9nOTF0e0m3qMYBTtl9ijMaE0/khNLBFA5WObuOs2NuE8t0VZc1lRGEcIw==}
-    engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
+  '@puniyu/nipaw-linux-x64-gnu@1.9.2':
+    resolution: {integrity: sha512-ZhS9RqnxAoU4bykvbF0TogBFuSCk0sOMwn5hF7FSsfzaX92xkklVXqcM3GynSXrbPdKQlpE4PzevhFzoweD4fg==}
+    engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@puniyu/nipaw-win32-x64-msvc@1.8.0':
-    resolution: {integrity: sha512-yEtou6WViynQElRbPIWcAnbI7PlndUHUbDV0cStkBx3SI5g3Fqthp9f3stEuotdrJOhUQPIpxkL5sx91habqSQ==}
-    engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
+  '@puniyu/nipaw-win32-x64-msvc@1.9.2':
+    resolution: {integrity: sha512-W3WAUwJ7Rk67psUc4jXIiLZ/5JF/lXQe2w1QGjxcWE43iNgoY8qOWi7xnVzrIxEEccXSBUMGoyOfbUfan6D2Zg==}
+    engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [win32]
 
-  '@puniyu/nipaw@1.8.0':
-    resolution: {integrity: sha512-6t7bGogMHjkJsLrqSOvZ0EbGSwYr2XlmG7g4hMjTqgDUsmIm9hYI2l+8KPIhVvsi8qOGzDYjpK8QfLiocfjTgg==}
-    engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
+  '@puniyu/nipaw@1.9.2':
+    resolution: {integrity: sha512-vo5P/kBGvIIHPi+EHk6dlHqpYfHo3muEVaA17kDTA4ERYekLFEkmrnGiXtALV4JVapusoXXNON+BJ+OGlFV35w==}
+    engines: {node: ^20.19.0 || >=22.12.0}
 
   '@quansync/fs@0.1.5':
     resolution: {integrity: sha512-lNS9hL2aS2NZgNW7BBj+6EBl4rOf8l+tQ0eRY6JWCI8jI2kc53gSoqbjojU0OnAWhzoXiOjFyGsHcDGePB3lhA==}
@@ -1528,28 +1528,28 @@ snapshots:
     dependencies:
       canvas: '@napi-rs/canvas@0.1.88'
 
-  '@puniyu/nipaw-darwin-arm64@1.8.0':
+  '@puniyu/nipaw-darwin-arm64@1.9.2':
     optional: true
 
-  '@puniyu/nipaw-darwin-x64@1.8.0':
+  '@puniyu/nipaw-darwin-x64@1.9.2':
     optional: true
 
-  '@puniyu/nipaw-linux-arm64-gnu@1.8.0':
+  '@puniyu/nipaw-linux-arm64-gnu@1.9.2':
     optional: true
 
-  '@puniyu/nipaw-linux-x64-gnu@1.8.0':
+  '@puniyu/nipaw-linux-x64-gnu@1.9.2':
     optional: true
 
-  '@puniyu/nipaw-win32-x64-msvc@1.8.0':
+  '@puniyu/nipaw-win32-x64-msvc@1.9.2':
     optional: true
 
-  '@puniyu/nipaw@1.8.0':
+  '@puniyu/nipaw@1.9.2':
     optionalDependencies:
-      '@puniyu/nipaw-darwin-arm64': 1.8.0
-      '@puniyu/nipaw-darwin-x64': 1.8.0
-      '@puniyu/nipaw-linux-arm64-gnu': 1.8.0
-      '@puniyu/nipaw-linux-x64-gnu': 1.8.0
-      '@puniyu/nipaw-win32-x64-msvc': 1.8.0
+      '@puniyu/nipaw-darwin-arm64': 1.9.2
+      '@puniyu/nipaw-darwin-x64': 1.9.2
+      '@puniyu/nipaw-linux-arm64-gnu': 1.9.2
+      '@puniyu/nipaw-linux-x64-gnu': 1.9.2
+      '@puniyu/nipaw-win32-x64-msvc': 1.9.2
 
   '@quansync/fs@0.1.5':
     dependencies:

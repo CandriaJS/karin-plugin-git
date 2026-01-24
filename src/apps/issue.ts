@@ -90,9 +90,12 @@ const handleRepoIssue = async (client: ClientType, platform: Platform) => {
     const eventRepoInfo = await db.repo.GetRepo(event.repoId)
     if (!eventRepoInfo) continue
     const groupKey = `${eventRepoInfo.groupId}-${eventRepoInfo.botId}`
-    const issueInfos = await client.getIssueList(
-      eventRepoInfo.owner,
-      eventRepoInfo.repo,
+    const issueClient = client.issue()
+    const issueInfos = await issueClient.list(
+      {
+        owner: eventRepoInfo.owner,
+        repo: eventRepoInfo.repo,
+      },
       {
         perPage: 100,
       },
