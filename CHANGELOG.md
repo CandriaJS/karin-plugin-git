@@ -1,5 +1,17 @@
 # 变更日志
 
+## [1.4.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.3.0...v1.4.0) (2026-01-24)
+
+
+### ✨ 新功能
+
+* **help:** 添加Git订阅功能帮助页面 ([296b654](https://github.com/CandriaJS/karin-plugin-git/commit/296b6546a6b689865015c2a1c9bf869f4bbdea2f))
+
+
+### 🔧 其他更新
+
+* 适配核心库新版参数使用方式 ([fa741ea](https://github.com/CandriaJS/karin-plugin-git/commit/fa741eaf961dec43540166748ae510ec6eef6e1c))
+
 ## [1.3.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.2.0...v1.3.0) (2025-11-29)
 
 
