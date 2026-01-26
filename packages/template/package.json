@@ -1,0 +1,32 @@
+{
+  "name": "@candriajs/template",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "vite --port 33710",
+    "build": "vite build && tsdown",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@vitejs/plugin-react": "^5.1.1",
+    "nipaw": "npm:@puniyu/nipaw@^1.9.4",
+    "react-router-dom": "^7.13.0",
+    "vite": "npm:rolldown-vite@latest",
+    "vite-tsconfig-paths": "^6.0.5",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3"
+  },
+  "dependencies": {
+    "@heroui/react": "3.0.0-beta.5",
+    "@heroui/styles": "3.0.0-beta.5",
+    "dayjs": "^1.11.19",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-icons": "^5.5.0",
+    "tailwindcss": "^4.1.18"
+  }
+}
