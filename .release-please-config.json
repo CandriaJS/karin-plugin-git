@@ -64,7 +64,7 @@
     }
   ],
   "packages": {
-    ".": {
+    "packages/core": {
       "release-type": "node"
     }
   },

@@ -1,0 +1,6 @@
+declare module '*.svg';
+declare module '*.png';
+declare module '*.webp';
+declare module '*.css';
+declare module '*.css?inline';
+declare module '*.scss';
