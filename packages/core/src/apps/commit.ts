@@ -8,7 +8,6 @@ export const commit = karin.command(
   /^#?(?:git(?:commit|提交信息)):(\w+):([^\/\s]+)\/([^:\s]+)(?::([^\/\s]+))?$/i,
   async (e: Message) => {
     const [, platform, owner, repo, sha] = e.msg.match(commit!.reg)!
-    console.log(platform, owner, repo, sha)
     let client: ClientType
     let token: string | null = null
     let platformType: Platform = Platform.GitHub
