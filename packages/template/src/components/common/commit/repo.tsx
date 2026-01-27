@@ -9,13 +9,7 @@ interface CommitRepoProps extends Pick<
 > {
   icon: IconType | string
 }
-export const CommitRepo = ({
-  icon,
-  owner,
-  repo,
-  branch,
-  sha,
-}: CommitRepoProps) => {
+export const Repo = ({ icon, owner, repo, branch, sha }: CommitRepoProps) => {
   const Icon = icon
   const isSanme = sha === branch
   return (

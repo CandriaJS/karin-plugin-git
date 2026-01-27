@@ -49,7 +49,7 @@ export const commit = karin.command(
         repo,
         sha,
         title: messageParts[0],
-        body: messageParts.slice(1).join('\n'),
+        content: messageParts.slice(1).join('\n'),
         stats: commitInfo.stats,
         files: commitInfo.files,
         author: commitInfo.commit.author,

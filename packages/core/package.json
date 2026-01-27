@@ -38,20 +38,14 @@
     "watch": "cross-env EBV_FILE=\"development.env\" tsx watch --include \"src/**/*.ts\" src/app.ts"
   },
   "dependencies": {
-    "@mdit/plugin-tasklist": "^0.22.2",
     "@puniyu/component": "^0.6.0",
-    "dayjs": "^1.11.19",
     "es-toolkit": "^1.44.0",
-    "markdown-it": "^14.1.0",
-    "markdown-it-emoji": "^3.0.0",
     "nipaw": "npm:@puniyu/nipaw@^1.9.4"
   },
   "devDependencies": {
     "@candriajs/template": "workspace:*",
     "@karinjs/plugin-puppeteer": "^1.0.21",
     "@types/express": "^5.0.6",
-    "@types/markdown-it": "^14.1.2",
-    "@types/markdown-it-emoji": "^3.0.1",
     "@types/react": "^19.2.9",
     "cross-env": "^7.0.3",
     "node-karin": "^1.13.0"

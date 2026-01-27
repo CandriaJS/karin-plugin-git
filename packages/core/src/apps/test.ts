@@ -19,6 +19,10 @@ export const test = karin.command('test', async (e: Message) => {
     date: new Date('2026-01-24T15:15:30Z'),
   },
   title: 'chore(deps): bump dependencies',
+  content: `- 删除了 event_server 钩子函数及其相关实现
+- 移除了事件消息处理的相关依赖导入
+- 清理了连接管理器的消息广播逻辑
+- 移除了协议转换和二进制编码相关代码`,
   stats: {
     total: 37,
     additions: 26,

@@ -14,12 +14,12 @@
     "@tailwindcss/vite": "^4.1.18",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
+    "@types/markdown-it": "^14.1.2",
+    "@types/markdown-it-emoji": "^3.0.1",
     "@vitejs/plugin-react": "^5.1.1",
     "nipaw": "npm:@puniyu/nipaw@^1.9.4",
     "react-router-dom": "^7.13.0",
     "vite": "npm:rolldown-vite@latest",
-    "vite-plugin-style-inject": "^0.0.1",
-    "vite-plugin-svgr": "^4.5.0",
     "vite-tsconfig-paths": "^6.0.5"
   },
   "dependencies": {
@@ -29,6 +29,9 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-icons": "^5.5.0",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "markdown-it": "^14.1.0",
+    "markdown-it-emoji": "^3.0.0",
+    "@mdit/plugin-tasklist": "^0.22.2"
   }
 }

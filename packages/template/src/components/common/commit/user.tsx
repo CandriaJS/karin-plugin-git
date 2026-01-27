@@ -1,7 +1,8 @@
 import { CommitInfo } from '@/types'
 import { toRelativeTime } from '@/utils/time'
 
-export const CommitUser = ({
+export const User
+ = ({
   author,
   committer,
 }: {
@@ -15,14 +16,17 @@ export const CommitUser = ({
       <div className="flex items-center ml-4 space-x-2">
         {isSame ? (
           <>
-            <img className='size-8 rounded-full' src={author.avatarUrl}></img>
+            <img className="size-8 rounded-full" src={author.avatarUrl}></img>
             <span>由 {author.name} 提交</span>
           </>
         ) : (
           <>
             <div className="flex -space-x-2">
-              <img className='size-8 rounded-full' src={author.avatarUrl}></img>
-              <img className='size-8 rounded-full' src={committer.avatarUrl}></img>
+              <img className="size-8 rounded-full" src={author.avatarUrl}></img>
+              <img
+                className="size-8 rounded-full"
+                src={committer.avatarUrl}
+              ></img>
             </div>
             <span>
               由 {author.name} 编写，并由 {committer.name} 提交

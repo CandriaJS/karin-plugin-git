@@ -1,10 +1,7 @@
 import path from 'node:path'
-import { full as emoji } from 'markdown-it-emoji'
-import { tasklist } from '@mdit/plugin-tasklist'
 import { segment, render, karinPathHtml } from 'node-karin'
 import * as component from '@puniyu/component'
 import { Version } from '@/root'
-import MarkdownIt from 'markdown-it'
 import {
   Platform,
   render as template_render,
@@ -51,17 +48,6 @@ const Render = {
       case Platform.CnbCool:
         return await Render.render(cnbcool.Commit({ ...options }), name)
     }
-  },
-
-  async markdown(markdown: string): Promise<string> {
-    const md = new MarkdownIt({
-      html: true,
-      breaks: true,
-    })
-    md.use(emoji)
-    md.use(tasklist)
-    md.renderer.rules.bullet_list_open = () => '<ul style="list-style: none;">'
-    return Promise.resolve(md.render(markdown))
   },
   help: component.help,
 }

@@ -1,6 +1,4 @@
-import type { CommitUserInfo, StatsInfo } from "nipaw"
-
-
+import type { CommitUserInfo, StatsInfo } from 'nipaw'
 
 export interface CommitInfo {
   owner: string
@@ -10,7 +8,7 @@ export interface CommitInfo {
   author: Omit<CommitUserInfo, 'email'>
   committer: Omit<CommitUserInfo, 'email'>
   title: string
-  body?: string | null
+  content?: string | null
   stats: StatsInfo
   files: Array<FileInfo>
 }
@@ -42,5 +40,5 @@ export enum FileStatus {
   /** 文件已变更 */
   Changed = 5,
   /** 文件未变更 */
-  UnChanged = 6
+  UnChanged = 6,
 }

@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
-import { renderToString } from 'react-dom/server'
+import { renderToStaticMarkup } from 'react-dom/server'
 import styles from '@/styles/global.css?inline'
 import fontStyles from '@/styles/font.css?inline'
 
 export const render = (element: ReactNode) => {
-  const html = renderToString(element)
+  const html = renderToStaticMarkup(element)
   const result = `
 <!doctype html>
 <html>
