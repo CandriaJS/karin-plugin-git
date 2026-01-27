@@ -6,19 +6,21 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "vite --port 33710",
+    "dev": "vite",
     "build": "vite build && tsdown",
     "preview": "vite preview"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "nipaw": "npm:@puniyu/nipaw@^1.9.4",
     "react-router-dom": "^7.13.0",
     "vite": "npm:rolldown-vite@latest",
-    "vite-tsconfig-paths": "^6.0.5",
-    "@types/react": "^19.2.5",
-    "@types/react-dom": "^19.2.3"
+    "vite-plugin-style-inject": "^0.0.1",
+    "vite-plugin-svgr": "^4.5.0",
+    "vite-tsconfig-paths": "^6.0.5"
   },
   "dependencies": {
     "@heroui/react": "3.0.0-beta.5",

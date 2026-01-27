@@ -1,14 +1,19 @@
 import type { ReactNode } from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
-import styles from '@/styles/global.css'
+import { renderToString } from 'react-dom/server'
+import styles from '@/styles/global.css?inline'
+import fontStyles from '@/styles/font.css?inline'
 
 export const render = (element: ReactNode) => {
-  const html = renderToStaticMarkup(element)
+  const html = renderToString(element)
   const result = `
 <!doctype html>
 <html>
   <head>
-    <style>${styles}</style>
+    <meta charset="UTF-8">
+    <style>
+      ${styles}
+      ${fontStyles}
+    </style>
   </head>
   <body>
     <div id="root">

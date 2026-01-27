@@ -1,4 +1,4 @@
-import cnbcoolIcon from '@/assets/icons/cnbcool.svg'
+import GitCode from '@/assets/icons/gitcode.svg'
 import {
   CommitRepo,
   CommitTitle,
@@ -24,7 +24,7 @@ export const Commit = ({
       <CommitTitle title="Gitee 仓库更新推送"></CommitTitle>
       <div className="w-4/5 h-9/10 flex flex-col space-y-4">
         <CommitRepo
-          icon={cnbcoolIcon}
+          icon={GitCode}
           owner={owner}
           repo={repo}
           branch={branch}

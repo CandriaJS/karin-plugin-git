@@ -1,13 +1,12 @@
-import { CommitUserInfo } from 'nipaw'
-import { Avatar } from '@heroui/react'
+import { CommitInfo } from '@/types'
 import { toRelativeTime } from '@/utils/time'
 
 export const CommitUser = ({
   author,
   committer,
 }: {
-  author: CommitUserInfo
-  committer: CommitUserInfo
+  author: CommitInfo['author']
+  committer: CommitInfo['committer']
 }) => {
   const isSame = author.name === committer.name
 
@@ -16,23 +15,14 @@ export const CommitUser = ({
       <div className="flex items-center ml-4 space-x-2">
         {isSame ? (
           <>
-            <Avatar size="sm">
-              <Avatar.Image alt="author" src={author.avatarUrl} />
-              <Avatar.Fallback>{author.name.charAt(0)}</Avatar.Fallback>
-            </Avatar>
+            <img className='size-10 rounded-full' src={author.avatarUrl}></img>
             <span>由 {author.name} 提交</span>
           </>
         ) : (
           <>
             <div className="flex -space-x-2">
-              <Avatar size="sm">
-                <Avatar.Image alt="author" src={author.avatarUrl} />
-                <Avatar.Fallback>{author.name.charAt(0)}</Avatar.Fallback>
-              </Avatar>
-              <Avatar size="sm">
-                <Avatar.Image alt="committer" src={committer.avatarUrl} />
-                <Avatar.Fallback>{committer.name.charAt(0)}</Avatar.Fallback>
-              </Avatar>
+              <img className='size-10 rounded-full' src={author.avatarUrl}></img>
+              <img className='size-10 rounded-full' src={committer.avatarUrl}></img>
             </div>
             <span>
               由 {author.name} 编写，并由 {committer.name} 提交

@@ -26,7 +26,7 @@ export const CommitRepo = ({
         <Icon className="mr-4 size-10" />
       )}
       <div className="flex">
-        <span className="text-xl font-bold">
+        <span className="text-2xl font-bold font-[MapleMono-Bold]">
           {owner}/{repo}
         </span>
       </div>

@@ -25,9 +25,9 @@ const Render = {
     const hash = createHash('md5').update(html).digest('hex').substring(0, 16)
     const htmlPath = path.join(htmlDir, `${name}_${hash}.html`)
     if (!fs.existsSync(htmlDir)) {
-      fs.mkdirSync(htmlDir, { recursive: true })
+      await fs.promises.mkdir(htmlDir, { recursive: true })
     }
-    fs.writeFileSync(htmlPath, html)
+    await fs.promises.writeFile(htmlPath, html, 'utf-8')
     const img = await render.render({
       file: htmlPath,
       scale: 1,

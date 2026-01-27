@@ -1,1 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
+
+@font-face {
+  font-family: "DouyinSans";
+  src: url("../assets/fonts/DouyinSans.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MapleMono-Medium";
+  src: url("../assets/fonts/MapleMono-Medium.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MapleMono-Bold";
+  src: url("../assets/fonts/MapleMono-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
