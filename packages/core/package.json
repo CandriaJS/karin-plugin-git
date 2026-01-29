@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/CandriaJS/karin-plugin-git.git"
   },
-  "license": "GNU General Public License v3.0",
+  "license": "GPL-3.0-or-later",
   "author": "CandriaJS",
   "type": "module",
   "main": "lib/index.js",
@@ -71,6 +71,5 @@
     "engines": {
       "karin": ">=1.9.1"
     }
-  },
-  "packageManager": "pnpm@10.14.0"
+  }
 }

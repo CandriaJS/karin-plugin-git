@@ -1,7 +1,7 @@
 export enum Platform {
-  GitHub,
-  Gitee,
-  GitCode,
-  CnbCool,
+  GitHub = "GitHub",
+  Gitee = "Gitee",
+  GitCode = "GitCode",
+  CnbCool = "CnbCool",
 }
 export * from './commit'

@@ -1,14 +1,12 @@
-import { Client, Config, make_hash } from '@/common'
-import { db } from '@/models'
-import { ClientType, ConfigType, EventType } from '@/types'
-import { Platform } from '@candriajs/template'
-import { isEmpty } from 'es-toolkit/compat'
+import { Config } from '@/common'
+import { db, client as Client } from '@/models'
+import { ClientType, ConfigType, EventType, Platform } from '@/types'
 import karin from 'node-karin'
 
 export const AddRepo = karin.command(
-  /^#?git(?:添加|add)([^\s]+)?订阅仓库([^/\s]+)\/([^:\s]+)(?::([^/\s]+))?(?:\s+([^/\s]+))?$/i,
+  /^#?git(?:添加|add)(?:订阅仓库|repo)(?:([a-zA-Z]+):([^/\s]+)\/([^:\s]+))(?:\s+([^/\s]+))?$/i,
   async (e) => {
-    const [, platform, owner, repo, branch, event] = e.msg.match(AddRepo!.reg)!
+    const [, platform, owner, repo, event] = e.msg.match(AddRepo!.reg)!
 
     const eventType = event
       ? (event
@@ -24,88 +22,69 @@ export const AddRepo = karin.command(
     let botId = e.selfId
     let groupId = e.groupId
     let platformName = Platform.GitHub
-    let client: ClientType
-
-    if (platform?.toLowerCase() === 'gitcode') {
-      platformName = Platform.GitCode
-      client = Client.gitcode()
-    } else if (platform?.toLowerCase() === 'gitee') {
-      platformName = Platform.Gitee
-      client = Client.gitee()
-    } else if (platform?.toLowerCase() === 'cnb') {
-      platformName = Platform.CnbCool
-      client = Client.cnbcool()
-    } else {
-      platformName = Platform.GitHub
-      client = Client.github()
+    let client: ClientType = Client.github()
+    switch (platform.toLowerCase()) {
+      case 'github':
+        client = Client.github()
+        platformName = Platform.GitHub
+        break
+      case 'gitcode':
+        client = Client.gitcode()
+        platformName = Platform.GitCode
+        break
+      case 'gitee':
+        client = Client.gitee()
+        platformName = Platform.Gitee
+        break
+      case 'cnb':
+      case 'cnbcool':
+        client = Client.cnbcool()
+        platformName = Platform.CnbCool
+        break
+      default:
+        return await e.reply('未找到该平台, 请重试')
     }
 
-    let repoInfo = await db.repo.GetRepo(botId, groupId, owner, repo)
+    let repoInfo = await db.repo.GetRepo(
+      platformName,
+      owner,
+      repo,
+      botId,
+      groupId,
+    )
     if (!repoInfo) {
-      await db.repo.AddRepo(botId, groupId, owner, repo)
-      repoInfo = await db.repo.GetRepo(botId, groupId, owner, repo)
+      await db.repo.AddRepo(platformName, owner, repo, botId, groupId)
+      repoInfo = await db.repo.GetRepo(
+        platformName,
+        owner,
+        repo,
+        botId,
+        groupId,
+      )
     }
     if (!repoInfo) return await e.reply('添加订阅仓库失败，请重试')
-
-    let eventInfo = await db.event.GetRepo(platformName, repoInfo.id, eventType)
-    if (!eventInfo) {
-      await db.event.AddRepo(platformName, repoInfo.id, eventType)
-      eventInfo = await db.event.GetRepo(platformName, repoInfo.id, eventType)
-    } else {
-      await db.event.UpdateEventType(platformName, repoInfo.id, eventType)
-    }
-    if (!eventInfo) {
-      return await e.reply('添加仓库订阅事件失败，请重试')
-    }
 
     let msg = `添加订阅仓库成功, 平台: ${platformName}, 仓库: ${owner}/${repo}, 订阅类型: ${eventType.join(',')}`
 
     const PushEvent = eventType.includes(EventType.Push)
     if (PushEvent) {
       const repoClient = client.repo()
-      const PushBranch =
-        branch || (await repoClient.info({ owner, repo })).defaultBranch
-      const pushRepo = await db.push.GetRepo(eventInfo.id, PushBranch)
+      const PushBranch = (await repoClient.info({ owner, repo })).defaultBranch
+      const pushRepo = await db.push.GetPush(repoInfo.id, PushBranch)
       if (!pushRepo) {
-        await db.push.AddRepo(eventInfo.id, PushBranch)
+        await db.push.AddPush(repoInfo.id, PushBranch)
         msg += `, 分支: ${PushBranch}`
       } else {
         msg = `仓库 ${owner}/${repo} 的推送订阅已存在，平台: ${platformName}, 分支: ${PushBranch}`
       }
     }
 
-    const IssueEvent = eventType.includes(EventType.Issue)
-    if (IssueEvent) {
-      const IssueRepo = await db.issue.GetRepo(eventInfo.id)
-      if (!IssueRepo.length) {
-        const issueClient = client.issue()
-        const issueInfoList = await issueClient.list(
-          { owner, repo },
-          {
-            perPage: 100,
-          },
-        )
-        if (isEmpty(issueInfoList))
-          return await e.reply('添加议题订阅失败，请重试')
-        for (const issueInfo of issueInfoList) {
-          await db.issue.AddRepo(
-            eventInfo.id,
-            issueInfo.number,
-            make_hash(issueInfo.title),
-            issueInfo.body ? make_hash(issueInfo.body) : null,
-            issueInfo.state,
-          )
-        }
-      } else {
-        msg = `仓库 ${owner}/${repo} 的议题订阅已存在, 平台: ${platformName}`
-      }
-    }
-    console.log(PushEvent, IssueEvent)
+    /// TODO: 添加Release订阅
 
     await e.reply(msg)
   },
   {
-    name: 'karin-plugin-git:admin:addRepo',
+    name: 'admin:addRepo',
     priority: 500,
     event: 'message.group',
     permission: 'master',
@@ -113,69 +92,47 @@ export const AddRepo = karin.command(
 )
 
 export const RemoveRepo = karin.command(
-  /^#?git(?:移除|删除|remove)([^\s]+)?订阅仓库([^/\s]+)\/([^:\s]+)(?::([^/\s]+))?(?:\s+([^/\s]+))?$/i,
+  /^#?git(?:移除|删除|remove)(?:订阅仓库|repo)(?:([a-zA-Z]+):([^/\s]+)\/([^:\s]+))$/i,
   async (e) => {
-    const [, platform, owner, repo, branch, event] = e.msg.match(
-      RemoveRepo!.reg,
-    )!
+    const [, platform, owner, repo] = e.msg.match(RemoveRepo!.reg)!
     let botId = e.selfId
     let groupId = e.groupId
     let platformName = Platform.GitHub
-    const eventType = event
-      ? (event
-          .toLocaleLowerCase()
-          .split(',')
-          .map((e) => e.trim())
-          .filter((e) => e) as Array<EventType>)
-      : [EventType.Push]
-    if (!eventType.length) {
-      eventType.push(EventType.Push)
+
+    switch (platform.toLowerCase()) {
+      case 'github':
+        platformName = Platform.GitHub
+        break
+      case 'gitcode':
+        platformName = Platform.GitCode
+        break
+      case 'gitee':
+        platformName = Platform.Gitee
+        break
+      case 'cnb':
+      case 'cnbcool':
+        platformName = Platform.CnbCool
+        break
+      default:
+        return await e.reply('未找到该平台, 请重试')
     }
 
-    if (platform?.toLowerCase() === 'gitcode') {
-      platformName = Platform.GitCode
-    } else if (platform?.toLowerCase() === 'gitee') {
-      platformName = Platform.Gitee
-    } else if (platform?.toLowerCase() === 'cnb') {
-      platformName = Platform.CnbCool
-    }
-
-    const repoInfo = await db.repo.GetRepo(botId, groupId, owner, repo)
-    if (!repoInfo) {
-      return await e.reply('未找到该仓库, 删除失败,请重试')
-    }
-    let eventInfo = await db.event.GetRepo(platformName, repoInfo.id, eventType)
-    if (!eventInfo) {
-      return await e.reply('未找到该订阅事件, 删除失败,请重试')
-    }
-
-    const PushEvent = eventType.includes(EventType.Push)
-    if (PushEvent) {
-      const event = eventInfo.eventType.filter((e) => e !== EventType.Push)
-      await db.event.UpdateEventType(platformName, repoInfo.id, event)
-      const pushRepo = await db.push.GetRepo(eventInfo.id, branch)
-      if (!pushRepo) {
-        return await e.reply('推送订阅不存在，删除失败')
-      }
-      await db.push.RemoveRepo(eventInfo.id, branch)
-    }
-    const IssueEvent = eventType.includes(EventType.Issue)
-    if (IssueEvent) {
-      const event = eventInfo.eventType.filter((e) => e !== EventType.Issue)
-      await db.event.UpdateEventType(platformName, repoInfo.id, event)
-      const issueRepo = await db.issue.GetRepo(eventInfo.id)
-      if (!issueRepo) {
-        return await e.reply('议题订阅不存在，删除失败')
-      }
-      await db.issue.RemoveRepo(eventInfo.id)
-    }
-
-    await e.reply(
-      `删除订阅仓库成功, 平台: ${platformName}, 仓库: ${owner}/${repo}, 订阅类型: ${eventType.join(',')}`,
+    const repoInfo = await db.repo.GetRepo(
+      platformName,
+      botId,
+      groupId,
+      owner,
+      repo,
     )
+    if (!repoInfo) {
+      return await e.reply('未找到该订阅仓库, 删除失败,请重试')
+    }
+    await db.push.RemovePush(repoInfo.id)
+
+    await e.reply(`删除订阅仓库成功`)
   },
   {
-    name: 'karin-plugin-git:admin:removeRepo',
+    name: 'admin:removeRepo',
     priority: 500,
     event: 'message.group',
     permission: 'master',
@@ -197,9 +154,6 @@ export const SetToken = karin.command(
       case 'gitee':
         configKey = 'gitee'
         break
-      case 'cnbcool':
-        configKey = 'cnbcool'
-        break
       case 'cnb':
       case 'cnbcool':
         configKey = 'cnbcool'
@@ -211,7 +165,7 @@ export const SetToken = karin.command(
     await e.reply(`设置${platform.toLowerCase()}访问令牌成功`)
   },
   {
-    name: 'karin-plugin-git:admin:SetToken',
+    name: 'admin:SetToken',
     priority: 500,
     event: 'message.friend',
     permission: 'master',

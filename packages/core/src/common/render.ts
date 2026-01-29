@@ -3,7 +3,6 @@ import { segment, render, karinPathHtml } from 'node-karin'
 import * as component from '@puniyu/component'
 import { Version } from '@/root'
 import {
-  Platform,
   render as template_render,
   CommitInfo,
   github,
@@ -14,6 +13,7 @@ import {
 import type { ReactNode } from 'react'
 import fs from 'node:fs'
 import { createHash } from 'node:crypto'
+import { Platform } from '@/types'
 
 const Render = {
   async render(element: ReactNode, name: string) {
@@ -28,7 +28,7 @@ const Render = {
     const img = await render.render({
       file: htmlPath,
       scale: 1,
-      screensEval: '#app',
+      screensEval: '#root',
       pageGotoParams: {
         waitUntil: 'networkidle0',
         timeout: 60000,

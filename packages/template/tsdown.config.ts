@@ -25,7 +25,7 @@ export default defineConfig({
   target: 'node22',
   sourcemap: false,
   treeshake: true,
-  platform: 'neutral',
+  platform: 'node',
   outDir: path.join(filePath, 'dist'),
   loader: { '.svg': 'dataurl' },
 })

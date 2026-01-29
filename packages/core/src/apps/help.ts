@@ -37,12 +37,12 @@ export const help = karin.command(
         name: '管理命令',
         list: [
           { 
-            name: '#git添加[platform]订阅仓库owner/repo[:branch] [event]', 
+            name: '#git添加订阅仓库[platform]:owner/repo[:event]', 
             desc: '添加一个订阅仓库, event可选:push,issue', 
             icon: subscriptionIcon 
           },
           { 
-            name: '#git删除[platform]订阅仓库owner/repo[:branch] [event]', 
+            name: '#git删除[platform]订阅仓库owner/repo', 
             desc: '删除一个订阅仓库', 
             icon: subscriptionIcon 
           },
@@ -70,7 +70,7 @@ export const help = karin.command(
     return true
   },
   {
-    name: 'karin-plugin-git:help',
+    name: 'help',
     priority: 500,
     event: 'message',
     permission: 'all',

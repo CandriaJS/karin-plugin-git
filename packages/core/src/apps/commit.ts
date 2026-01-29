@@ -1,8 +1,8 @@
 import karin, { logger, Message } from 'node-karin'
-import { Client, Config, Render } from '@/common'
-import { ClientType } from '@/types'
+import { Config, Render } from '@/common'
+import { ClientType, Platform } from '@/types'
 import { isEmpty } from 'es-toolkit/compat'
-import { Platform } from '@candriajs/template'
+import { client as Client } from '@/models'
 
 export const commit = karin.command(
   /^#?(?:git(?:commit|提交信息)):(\w+):([^\/\s]+)\/([^:\s]+)(?::([^\/\s]+))?$/i,
@@ -60,9 +60,12 @@ export const commit = karin.command(
       return await e.reply(img)
     } catch (err) {
       logger.error(
-        `获取提交信息出错: ${owner}/${repo}:${sha} - ${(err as Error).message}`,
+        `获取${platform.toLowerCase()}提交信息出错: ${owner}/${repo}:${sha} - ${(err as Error).message}`,
       )
       return await e.reply('未找到指定提交信息')
     }
+  },
+  {
+    name: 'commit:info',
   },
 )

@@ -1,15 +1,15 @@
 export * from './common'
 export * from './config'
-export * from './db'
+export * as db from './db'
 
 export const enum Platform {
-  GitHub = 'github',
-  Gitee = 'gitee',
-  GitCode = 'gitcode',
-  Cnb = 'cnb',
+  GitHub = "GitHub",
+  Gitee = "Gitee",
+  GitCode = "GitCode",
+  CnbCool = "CnbCool",
 }
 
 export const enum EventType {
   Push = 'push',
-  Issue = 'issue',
+  Release = 'release',
 }

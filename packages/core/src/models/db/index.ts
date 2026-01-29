@@ -22,26 +22,14 @@ export const InitDb = async () => {
   client.exec(`
     CREATE TABLE IF NOT EXISTS repo (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      platform TEXT NOT NULL,
       owner TEXT NOT NULL,
       repo TEXT NOT NULL,
       botId TEXT NOT NULL,
       groupId TEXT NOT NULL,
       createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
       updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
-      UNIQUE(owner, repo, botId, groupId)
-    )
-  `)
-
-  // 创建 event 表
-  client.exec(`
-    CREATE TABLE IF NOT EXISTS event (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      repoId INTEGER NOT NULL,
-      platform TEXT NOT NULL,
-      eventType TEXT NOT NULL,
-      createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
-      updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
-      FOREIGN KEY (repoId) REFERENCES repo(id) ON DELETE CASCADE
+      UNIQUE(platform, owner, repo, botId, groupId)
     )
   `)
 
@@ -49,27 +37,25 @@ export const InitDb = async () => {
   client.exec(`
     CREATE TABLE IF NOT EXISTS push (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      eventId INTEGER NOT NULL,
+      repoId INTEGER NOT NULL,
       branch TEXT NOT NULL,
-      commitSha TEXT,
+      commitSha TEXT NOT NULL,
       createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
       updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
-      FOREIGN KEY (eventId) REFERENCES event(id) ON DELETE CASCADE
+      FOREIGN KEY (repoId) REFERENCES repo(id) ON DELETE CASCADE,
+      UNIQUE(repoId, branch)
     )
   `)
 
-  // 创建 issue 表
+  // 创建 release 表
   client.exec(`
-    CREATE TABLE IF NOT EXISTS issue (
+    CREATE TABLE IF NOT EXISTS release (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      eventId INTEGER NOT NULL,
-      issueId TEXT NOT NULL,
-      title TEXT,
-      body TEXT,
-      state TEXT,
+      repoId INTEGER NOT NULL,
+      tagName TEXT NOT NULL,
       createdAt DATETIME DEFAULT (datetime('now', 'localtime')),
       updatedAt DATETIME DEFAULT (datetime('now', 'localtime')), 
-      FOREIGN KEY (eventId) REFERENCES event(id) ON DELETE CASCADE
+      FOREIGN KEY (repoId) REFERENCES repo(id) ON DELETE CASCADE
     )
   `)
 
@@ -77,16 +63,8 @@ export const InitDb = async () => {
   client.exec(
     `CREATE INDEX IF NOT EXISTS idx_repo_lookup ON repo(botId, groupId)`,
   )
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_event ON push(eventId)`)
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_issue_event ON issue(eventId)`)
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_event_repo ON event(repoId)`)
-  client.exec(
-    `CREATE INDEX IF NOT EXISTS idx_event_platform ON event(platform)`,
-  )
-  client.exec(`CREATE INDEX IF NOT EXISTS idx_event_type ON event(eventType)`)
+  client.exec(`CREATE INDEX IF NOT EXISTS idx_push_branch ON push(repoId, branch)`)
 }
 
 export * as push from './push'
 export * as repo from './repo'
-export * as issue from './issue'
-export * as event from './event'
