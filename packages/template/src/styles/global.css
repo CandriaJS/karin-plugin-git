@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+body {
+    font-family: 'DouyinSans', Arial, sans-serif;
+}
