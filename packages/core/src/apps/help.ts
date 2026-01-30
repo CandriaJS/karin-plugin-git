@@ -37,12 +37,12 @@ export const help = karin.command(
         name: '管理命令',
         list: [
           { 
-            name: '#git添加订阅仓库[platform]:owner/repo[:event]', 
-            desc: '添加一个订阅仓库, event可选:push,issue', 
+            name: '#git添加订阅仓库[platform:]owner/repo[:event]', 
+            desc: '添加一个订阅仓库, event可选:push', 
             icon: subscriptionIcon 
           },
           { 
-            name: '#git删除[platform]订阅仓库owner/repo', 
+            name: '#git删除订阅仓库[platform:]owner/repo', 
             desc: '删除一个订阅仓库', 
             icon: subscriptionIcon 
           },

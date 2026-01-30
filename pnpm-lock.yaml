@@ -70,8 +70,8 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       node-karin:
-        specifier: ^1.13.0
-        version: 1.14.1
+        specifier: ^1.14.2
+        version: 1.14.2
 
   packages/template:
     dependencies:
@@ -2370,8 +2370,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  node-karin@1.14.1:
-    resolution: {integrity: sha512-WHXEojGY3cuC5j4V582qKQz22s5BXlTTTBgR8TNwlFdupthASHsXl5P4p2dN6CHrwQLtqV5rXkkvBFZsQEfLBg==}
+  node-karin@1.14.2:
+    resolution: {integrity: sha512-mslbo5djYotvC2tfo1rvRFZJeFnHC4L+oniYEO644Z1u/nWEYVeYAmFnl9a++9NKABr0wOzIMB+STlmqLJivOg==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -5149,7 +5149,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  node-karin@1.14.1:
+  node-karin@1.14.2:
     dependencies:
       art-template: '@karinjs/art-template@1.1.0'
       axios: '@karinjs/axios@1.13.2'

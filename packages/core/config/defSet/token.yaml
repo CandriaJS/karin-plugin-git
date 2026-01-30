@@ -1,0 +1,11 @@
+# Github 访问令牌 https://github.com/settings/tokens
+github:
+
+# Gitee 访问令牌 https://gitee.com/profile/personal_access_tokens
+gitee:
+
+# GitCode 访问令牌 https://gitcode.com/setting/token-classic
+gitcode: 
+
+# CnbCool 访问令牌 https://cnb.cool/profile/token
+cnbcool: 

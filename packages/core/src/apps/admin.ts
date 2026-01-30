@@ -45,37 +45,43 @@ export const AddRepo = karin.command(
         return await e.reply('未找到该平台, 请重试')
     }
 
-    let repoInfo = await db.repo.GetRepo(
-      platformName,
-      owner,
-      repo,
-      botId,
-      groupId,
-    )
+    let [repoInfo, sessionInfo] = await Promise.all([
+      db.repo.GetRepo(platformName, owner, repo),
+      db.session.GetSession(botId, groupId),
+    ])
     if (!repoInfo) {
-      await db.repo.AddRepo(platformName, owner, repo, botId, groupId)
-      repoInfo = await db.repo.GetRepo(
-        platformName,
-        owner,
-        repo,
-        botId,
-        groupId,
-      )
+      await db.repo.AddRepo(platformName, owner, repo)
+      repoInfo = await db.repo.GetRepo(platformName, owner, repo)
     }
-    if (!repoInfo) return await e.reply('添加订阅仓库失败，请重试')
+    if (!sessionInfo) {
+      await db.session.AddSession(botId, groupId)
+      sessionInfo = await db.session.GetSession(botId, groupId)
+    }
+    if (!repoInfo || !sessionInfo)
+      return await e.reply('添加订阅仓库失败，请重试')
 
     let msg = `添加订阅仓库成功, 平台: ${platformName}, 仓库: ${owner}/${repo}, 订阅类型: ${eventType.join(',')}`
 
     const PushEvent = eventType.includes(EventType.Push)
     if (PushEvent) {
       const repoClient = client.repo()
-      const PushBranch = (await repoClient.info({ owner, repo })).defaultBranch
-      const pushRepo = await db.push.GetPush(repoInfo.id, PushBranch)
+      let defaultBranch: string
+      try {
+        const repo_info = await repoClient.info({ owner, repo })
+        defaultBranch = repo_info.defaultBranch
+      } catch (e) {
+        defaultBranch = 'main'
+      }
+      const pushRepo = await db.push.GetPush(
+        repoInfo.id,
+        sessionInfo.id,
+        defaultBranch,
+      )
       if (!pushRepo) {
-        await db.push.AddPush(repoInfo.id, PushBranch)
-        msg += `, 分支: ${PushBranch}`
+        await db.push.AddPush(repoInfo.id, sessionInfo.id, defaultBranch)
+        msg += `, 分支: ${defaultBranch}`
       } else {
-        msg = `仓库 ${owner}/${repo} 的推送订阅已存在，平台: ${platformName}, 分支: ${PushBranch}`
+        msg = `仓库 ${owner}/${repo} 的推送订阅已存在, 请勿重复订阅`
       }
     }
 
@@ -88,6 +94,50 @@ export const AddRepo = karin.command(
     priority: 500,
     event: 'message.group',
     permission: 'master',
+  },
+)
+
+export const BindRepo = karin.command(
+  /^#?git(?:绑定|bind)(?:仓库|repo)(?:([a-zA-Z]+):([^/\s]+)\/([^:\s]+))$/i,
+  async (e) => {
+    const [, platform, owner, repo] = e.msg.match(BindRepo!.reg)!
+    let platformName = Platform.GitHub
+
+    switch (platform.toLowerCase()) {
+      case 'github':
+        platformName = Platform.GitHub
+        break
+      case 'gitcode':
+        platformName = Platform.GitCode
+        break
+      case 'gitee':
+        platformName = Platform.Gitee
+        break
+      case 'cnb':
+      case 'cnbcool':
+        platformName = Platform.CnbCool
+        break
+      default:
+        return await e.reply('未找到该平台, 请重试')
+    }
+    let repoInfo = await db.repo.GetRepo(platformName, owner, repo)
+    if (!repoInfo) {
+      await db.repo.AddRepo(platformName, owner, repo)
+      repoInfo = await db.repo.GetRepo(platformName, owner, repo)
+    }
+    if (!repoInfo) {
+      return await e.reply('绑定仓库失败, 请重试')
+    }
+    const BindInfo = await db.bind.GetBind(e.groupId)
+    if (BindInfo) {
+      return await e.reply('该群已绑定该仓库, 请勿重复绑定')
+    }
+    await db.bind.AddBind(e.groupId, repoInfo.id)
+    await e.reply(`绑定仓库成功, 平台: ${platformName}, 仓库: ${owner}/${repo}`)
+  },
+  {
+    name: 'admin:bindRepo',
+    event: 'message.group',
   },
 )
 
@@ -117,17 +167,14 @@ export const RemoveRepo = karin.command(
         return await e.reply('未找到该平台, 请重试')
     }
 
-    const repoInfo = await db.repo.GetRepo(
-      platformName,
-      botId,
-      groupId,
-      owner,
-      repo,
-    )
-    if (!repoInfo) {
+    const [repoInfo, sessionInfo] = await Promise.all([
+      db.repo.GetRepo(platformName, owner, repo),
+      db.session.GetSession(botId, groupId),
+    ])
+    if (!repoInfo || !sessionInfo) {
       return await e.reply('未找到该订阅仓库, 删除失败,请重试')
     }
-    await db.push.RemovePush(repoInfo.id)
+    await db.push.RemovePush(repoInfo.id, sessionInfo.id)
 
     await e.reply(`删除订阅仓库成功`)
   },

@@ -4,46 +4,46 @@ import { CnbClient, GitCodeClient, GiteeClient, GithubClient } from 'nipaw'
 
 export const github = () => {
   const client = new GithubClient()
-  if (!isEmpty(Config.github.reverseProxy)) {
-    client.setReverseProxy(Config.github.reverseProxy)
-  } else if (!isEmpty(Config.github.proxy)) {
-    client.setProxy(Config.github.proxy)
+  if (!isEmpty(Config.proxy.reverseProxy)) {
+    client.setReverseProxy(Config.proxy.reverseProxy)
+  } else if (!isEmpty(Config.proxy.proxy)) {
+    client.setProxy(Config.proxy.proxy)
   }
-  if (!isEmpty(Config.github.token)) {
-    client.setToken(Config.github.token)
+  if (!isEmpty(Config.token.github)) {
+    client.setToken(Config.token.github)
   }
   return client
 }
 
 export const gitee = () => {
   const client = new GiteeClient()
-  if (!isEmpty(Config.gitee.proxy)) {
-    client.setProxy(Config.gitee.proxy)
+  if (!isEmpty(Config.proxy.proxy)) {
+    client.setProxy(Config.proxy.proxy)
   }
-  if (!isEmpty(Config.gitee.token)) {
-    client.setToken(Config.gitee.token)
+  if (!isEmpty(Config.token.gitee)) {
+    client.setToken(Config.token.gitee)
   }
   return client
 }
 
 export const gitcode = () => {
   const client = new GitCodeClient()
-  if (!isEmpty(Config.gitcode.proxy)) {
-    client.setProxy(Config.gitcode.proxy)
+  if (!isEmpty(Config.proxy.proxy)) {
+    client.setProxy(Config.proxy.proxy)
   }
-  if (!isEmpty(Config.gitcode.token)) {
-    client.setToken(Config.gitcode.token)
+  if (!isEmpty(Config.token.gitcode)) {
+    client.setToken(Config.token.gitcode)
   }
   return client
 }
 
 export const cnbcool = () => {
   const client = new CnbClient()
-  if (!isEmpty(Config.cnbcool.proxy)) {
-    client.setProxy(Config.cnbcool.proxy)
+  if (!isEmpty(Config.proxy.proxy)) {
+    client.setProxy(Config.proxy.proxy)
   }
-  if (!isEmpty(Config.cnbcool.token)) {
-    client.setToken(Config.cnbcool.token)
+  if (!isEmpty(Config.token.cnbcool)) {
+    client.setToken(Config.token.cnbcool)
   }
   return client
 }

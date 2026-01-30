@@ -1,24 +1,21 @@
-export interface ClientConfigType {
-  /// 推送任务执行时间
-  cron: string
-  /// 代理地址
-  proxy: string
-  /// github访问令牌
-  token: string
-}
+import { ConfigType as ProxyConfigType } from './proxy'
+import { ConfigType as TokenConfigType } from './token'
 
-export interface GithubCongfigType extends ClientConfigType {
-  /// 反向代理地址
-  reverseProxy: string
+export interface CronConfigType {
+  cron: string
 }
 
 export interface ConfigType {
   /// GitHub配置
-  github: GithubCongfigType
+  github: CronConfigType
   /// Gitee配置
-  gitee: ClientConfigType
+  gitee: CronConfigType
   /// GitCode配置
-  gitcode: ClientConfigType
+  gitcode: CronConfigType
   /// Cnb配置
-  cnbcool: ClientConfigType
+  cnbcool: CronConfigType
+  /// 代理配置
+  proxy: ProxyConfigType
+  /// 访问令牌配置
+  token: TokenConfigType
 }

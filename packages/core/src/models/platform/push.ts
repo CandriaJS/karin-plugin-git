@@ -24,10 +24,11 @@ export abstract class BasePush {
     const PushList = allPushes.filter((push) => repoIds.includes(push.repoId))
     const commit = this.client.commit()
     PushList.forEach(async (push) => {
-      const repoInfo = await db.repo.GetRepoById(push.id)
+      const repoInfo = await db.repo.GetRepo(push.id)
       logger.debug(
         `开始处理 ${this.platform} ${repoInfo.owner}/${repoInfo.repo} ${push.branch}}`,
       )
+      const sessionInfo = await db.session.GetSession(push.sessionId)
       const commitInfo = await commit.info(
         {
           owner: repoInfo.owner,
@@ -36,8 +37,8 @@ export abstract class BasePush {
         push.branch,
       )
       if (commitInfo.sha === push.commitSha) return
-      const bot = getBot(repoInfo.botId)
-      if (!bot) throw new Error(`Bot ${repoInfo.botId} not found`)
+      const bot = getBot(sessionInfo.botId)
+      if (!bot) throw new Error(`Bot ${sessionInfo.botId} not found`)
 
       const messageParts = commitInfo.commit.message.split('\n')
       const commitData: CommitDataType = {
@@ -53,9 +54,14 @@ export abstract class BasePush {
         files: commitInfo.files,
       }
       const img = await Render.commit(this.platform, commitData)
-      const contact = contactGroup(repoInfo.groupId)
+      const contact = contactGroup(sessionInfo.groupId)
       await bot.sendMsg(contact, [img])
-      await db.push.UpdatePush(push.id, push.branch, commitInfo.sha)
+      await db.push.UpdatePush(
+        push.repoId,
+        push.sessionId,
+        push.branch,
+        commitInfo.sha,
+      )
     })
   }
 }

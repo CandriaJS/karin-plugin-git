@@ -7,7 +7,7 @@ export const github = karin.task(
   'commit:push:github',
   Config.github.cron || '0 */5 * * * *',
   async () => {
-    const token = Config.github.token
+    const token = Config.token.github
     if (isEmpty(token)) return logger.warn('未配置GitHub Token, 跳过任务')
     try {
       const client = new platform.github.Push()
@@ -22,7 +22,7 @@ export const gitee = karin.task(
   'commit:push:gitee',
   Config.gitee.cron || '0 */5 * * * *',
   async () => {
-    const token = Config.gitee.token
+    const token = Config.token.gitee
     if (isEmpty(token)) return logger.warn('未配置 Gitee Token, 跳过任务')
     try {
       const client = new platform.gitee.Push()
@@ -37,7 +37,7 @@ export const gitcode = karin.task(
   'commit:push:gitcode',
   Config.gitcode.cron || '0 */5 * * * *',
   async () => {
-    const token = Config.gitcode.token
+    const token = Config.token.gitcode
     if (isEmpty(token)) return logger.warn('未配置 GitCode Token, 跳过任务')
     try {
       const client = new platform.gitcode.Push()
@@ -51,7 +51,7 @@ export const cnbcool = karin.task(
   'commit:push:cnbcool',
   Config.cnbcool.cron || '0 */5 * * * *',
   async () => {
-    const token = Config.cnbcool.token
+    const token = Config.token.cnbcool
     if (isEmpty(token)) return logger.warn('未配置 CnbCol Token, 跳过任务')
     try {
       const client = new platform.cnbcool.Push()
