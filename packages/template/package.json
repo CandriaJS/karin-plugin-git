@@ -17,7 +17,7 @@
     "@types/markdown-it": "^14.1.2",
     "@types/markdown-it-emoji": "^3.0.1",
     "@vitejs/plugin-react": "^5.1.1",
-    "nipaw": "npm:@puniyu/nipaw@^1.9.4",
+    "nipaw": "npm:@puniyu/nipaw@^1.9.5",
     "react-router-dom": "^7.13.0",
     "vite": "npm:rolldown-vite@latest",
     "vite-tsconfig-paths": "^6.0.5"

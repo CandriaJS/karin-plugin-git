@@ -30,7 +30,7 @@ jobs:
 
       - name: 处理构建产物
         run: |
-          
+          pnpm pkg delete devDependencies
           cp -r package.json CHANGELOG.md resources config lib ${{ runner.temp }}/temp/plugin
         working-directory: packages/core
 

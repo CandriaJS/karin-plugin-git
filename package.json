@@ -19,7 +19,7 @@
     "cross-env": "^7.0.3",
     "node-karin": "1.10.23",
     "tsc-alias": "1.8.13",
-    "tsdown": "^0.17.2",
+    "tsdown": "^0.20.1",
     "tsx": "^4.19.4",
     "typescript": "^5.9.2"
   },

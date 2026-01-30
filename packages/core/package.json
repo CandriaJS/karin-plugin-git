@@ -40,7 +40,7 @@
   "dependencies": {
     "@puniyu/component": "^0.6.0",
     "es-toolkit": "^1.44.0",
-    "nipaw": "npm:@puniyu/nipaw@^1.9.4"
+    "nipaw": "npm:@puniyu/nipaw@^1.9.5"
   },
   "devDependencies": {
     "@candriajs/template": "workspace:*",

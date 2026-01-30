@@ -18,8 +18,8 @@ export default defineConfig({
   fixedExtension: true,
   dts: {
     emitDtsOnly: true,
-    resolve: true,
   },
+  inlineOnly: false,
   clean: false,
   minify: true,
   target: 'node22',
