@@ -1,5 +1,37 @@
 # 变更日志
 
+## [1.4.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.3.0...v1.4.0) (2026-01-31)
+
+
+### ✨ 新功能
+
+* **core:** 添加仓库绑定功能并重构数据库结构 ([84cbfa9](https://github.com/CandriaJS/karin-plugin-git/commit/84cbfa9dcd7fdc6bc36371b2765fddd23e3ad367))
+* **models:** 实现session和bind数据模型 ([84cbfa9](https://github.com/CandriaJS/karin-plugin-git/commit/84cbfa9dcd7fdc6bc36371b2765fddd23e3ad367))
+* **web:** 添加平台推送仓库列表配置界面 ([c720bf1](https://github.com/CandriaJS/karin-plugin-git/commit/c720bf169ad727f39484e1e4e3b68c7500e2582e))
+
+
+### 🐛 错误修复
+
+* **commit:** 优化提交信息查询逻辑 ([84cbfa9](https://github.com/CandriaJS/karin-plugin-git/commit/84cbfa9dcd7fdc6bc36371b2765fddd23e3ad367))
+
+
+### 🔧 其他更新
+
+* **core:** 更新 nipaw 依赖版本 ([6575fc9](https://github.com/CandriaJS/karin-plugin-git/commit/6575fc9832f56419300be40c48f704159c2f293f))
+
+
+### ♻️ 代码重构
+
+* **config:** 重构配置文件结构 ([84cbfa9](https://github.com/CandriaJS/karin-plugin-git/commit/84cbfa9dcd7fdc6bc36371b2765fddd23e3ad367))
+* **core:** 重构核心实现 ([#14](https://github.com/CandriaJS/karin-plugin-git/issues/14)) ([fa15ee1](https://github.com/CandriaJS/karin-plugin-git/commit/fa15ee174127db957b7b18584daf6ac157cf370a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @candriajs/template bumped to 1.4.0
+
 ## [1.3.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.2.0...v1.3.0) (2025-11-29)
 
 
