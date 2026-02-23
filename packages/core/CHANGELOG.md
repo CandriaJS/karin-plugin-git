@@ -1,5 +1,12 @@
 # 变更日志
 
+## [1.4.1](https://github.com/CandriaJS/karin-plugin-git/compare/v1.4.0...v1.4.1) (2026-02-23)
+
+
+### 🐛 错误修复
+
+* 修复图标路径 ([1b86f18](https://github.com/CandriaJS/karin-plugin-git/commit/1b86f18339b4d07ea1f0293afe2fc8f567975b5e))
+
 ## [1.4.0](https://github.com/CandriaJS/karin-plugin-git/compare/v1.3.0...v1.4.0) (2026-01-31)
 
 

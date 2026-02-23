@@ -1,6 +1,6 @@
 {
   "name": "@candriajs/karin-plugin-git",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "一个karin的git平台仓库订阅推送",
   "keywords": [
     "karin-plugin",
