@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { segment, render, karinPathHtml } from 'node-karin'
+import { segment, render, karinPathHtml, base64 } from 'node-karin'
 import * as component from '@puniyu/component'
 import { Version } from '@/root'
 import {
@@ -34,7 +34,7 @@ const Render = {
         timeout: 60000,
       },
     })
-    return segment.image(`base64://${img.toString()}`)
+    return segment.image(img.startsWith("base64") ? img : `base64://${img}`)
   },
   async commit(platform: Platform = Platform.GitHub, options: CommitInfo) {
     const name = 'commit'

@@ -1,9 +1,9 @@
 # <h1 align="center">karin-plugin-git</h1>
 
 <div align="center">
-<img src="https://socialify.git.ci/CandriaJS/karin-plugin-git/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light" alt="emojimix-plugin" width="640" height="320" />
+<img src="https://socialify.git.ci/CandriaJS/karin-plugin-git/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light" alt="git-plugin" width="640" height="320" />
 
-<a href="https://github.com/KarinJS/Karin"><img src="https://badgen.net/npm/v/node-karin?label=Karin" alt="Gitee"></a><a href="https://qm.qq.com/q/gBs8Ri3nIQ"><img src="https://img.shields.io/badge/group-272040396-blue" alt="Gitee"></a>
+<a href="https://github.com/KarinJS/Karin"><img src="https://badgen.net/npm/v/node-karin?label=Karin" alt="Gitee">>
 
 <img alt="Release" src="https://badgen.net/github/release/CandriaJS/karin-plugin-git/stable"><img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/CandriaJS/karin-plugin-git">
 
@@ -13,7 +13,7 @@
 
 ## 介绍 📝
 
-`柠糖图片操作` 是一个 `Karin` 的扩展插件，提供bot对Git仓库操作功能。
+`karin-plugin-git` 是一个 `Karin` 的扩展插件，提供bot对Git仓库操作功能。
 
 ## 安装与更新 🔧
 

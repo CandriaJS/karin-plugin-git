@@ -9,7 +9,7 @@
     },
     {
       "type": "linked-versions",
-      "groupName": "nipaw",
+      "groupName": "plugin",
       "components": ["core", "template"]
     }
   ],
