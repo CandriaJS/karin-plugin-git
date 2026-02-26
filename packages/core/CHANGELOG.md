@@ -1,5 +1,19 @@
 # 变更日志
 
+## [1.6.0](https://github.com/CandriaJS/karin-plugin-git/compare/core-v1.5.0...core-v1.6.0) (2026-02-26)
+
+
+### 🔧 其他更新
+
+* **core:** Synchronize plugin versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @candriajs/template bumped to 1.6.0
+
 ## [1.5.0](https://github.com/CandriaJS/karin-plugin-git/compare/core-v1.4.0...core-v1.5.0) (2026-02-26)
 
 
