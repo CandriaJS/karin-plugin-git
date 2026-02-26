@@ -25,7 +25,5 @@ export default defineConfig({
   platform: 'node',
   outDir: path.join(filePath, 'lib'),
   external: [/^node-karin/],
-  noExternal: [
-    '@candriajs/template'
-  ]
+  noExternal: ['@candriajs/template'],
 })
