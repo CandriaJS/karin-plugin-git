@@ -83,7 +83,7 @@ jobs:
 
       - name: 发布 plugin
         run: |
-          bun x pkg-pr-new publish --json output.json --comment=off > plugin.txt 2>&1
+          bunx pkg-pr-new publish --json output.json --comment=off > plugin.txt 2>&1
 
           echo "## 成功推送的Package包 :" >> $GITHUB_STEP_SUMMARY
           echo "包名: \`@candriajs/karin-plugin-git\`" >> $GITHUB_STEP_SUMMARY
