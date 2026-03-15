@@ -1,4 +1,4 @@
-import karin, { logger, Message } from 'node-karin'
+import karin, { logger } from 'node-karin'
 import { Config, Render } from '@/common'
 import { ClientType, Platform } from '@/types'
 import { isEmpty } from 'es-toolkit/compat'
@@ -8,15 +8,21 @@ export const commit = karin.command(
   /^#?(?:git(?:commit|提交信息|提交记录))\s*(\w+)(?::(?:([^\/\s]+)\/([^:\s]+)))?(?::([^\/\s]+))?$/i,
   async (e) => {
     let [, platform, owner, repo, sha] = e.msg.match(commit!.reg)!
-    if (!owner || !repo) {
-      const bindInfo = await db.bind.GetBind(e.groupId)
-      if (!bindInfo) {
-        return await e.reply('请先绑定仓库或指定仓库')
+    if (e.isGroup) {
+      if (!owner || !repo) {
+        const bindInfo = await db.bind.GetBind(e.groupId)
+        if (!bindInfo) {
+          return await e.reply('请先绑定仓库或指定仓库')
+        }
+        const repoInfo = await db.repo.GetRepo(bindInfo.repoId)
+        owner = repoInfo.owner
+        repo = repoInfo.repo
       }
-      const repoInfo = await db.repo.GetRepo(bindInfo.repoId)
-      owner = repoInfo.owner
-      repo = repoInfo.repo
     }
+    if (!owner || !repo) {
+      return await e.reply('请指定仓库')
+    }
+
     let client: ClientType
     let token: string = Config.token.github
     let platformType: Platform = Platform.GitHub
@@ -74,6 +80,6 @@ export const commit = karin.command(
   },
   {
     name: 'commit:info',
-    event: 'message.group',
+    event: 'message',
   },
 )

@@ -9,7 +9,7 @@ export const help = karin.command(
   /^#?(?:(git))(?:命令|帮助|菜单|help|说明|功能|指令|使用说明)$/i,
   async (e: Message) => {
     const subscribeIcon = await fs.promises.readFile(
-      `${Version.Plugin_Path}/resources/icons/repo.svg`,
+      `${Version.Plugin_Path}/resources/images/repo.svg`,
     )
 
     const List: HelpGroup = {
@@ -27,10 +27,10 @@ export const help = karin.command(
 
     if (e.isMaster) {
       const subscriptionIcon = await fs.promises.readFile(
-        `${Version.Plugin_Path}/resources/icons/subscription.svg`,
+        `${Version.Plugin_Path}/resources/images/subscription.svg`,
       )
       const tokenIcon = await fs.promises.readFile(
-        `${Version.Plugin_Path}/resources/icons/token.svg`,
+        `${Version.Plugin_Path}/resources/images/token.svg`,
       )
       
       helpList.push({
@@ -55,7 +55,7 @@ export const help = karin.command(
       })
     }
     const bg = await fs.promises.readFile(
-      `${Version.Plugin_Path}/resources/background.webp`,
+      `${Version.Plugin_Path}/resources/images/background.webp`,
     )
 
     const img = await Render.help({

@@ -15,48 +15,60 @@ const markdown = (markdown: string) => {
   return md.render(markdown)
 }
 
-const Title = ({ title }: Pick<CommitInfo, 'title'>) => {
+interface TitleProps {
+  title: CommitInfo['title']
+}
+
+const Title = ({ title }: TitleProps) => {
   return (
-    <div className="w-full flex-1 items-center ml-4 my-2">
-      <span className="text-md">{title}</span>
+    <div className="w-full flex items-center px-4 pt-3 pb-2">
+      <span className="text-lg font-semibold text-gray-800">{title}</span>
     </div>
   )
 }
 
-const Stat = ({ stats, files }: Pick<CommitInfo, 'stats' | 'files'>) => {
+interface StatProps {
+  stats: CommitInfo['stats']
+  files: CommitInfo['files']
+}
+
+const Stat = ({ stats, files }: StatProps) => {
   return (
-    <div className="flex items-center ml-auto mr-4 text-sm space-x-1">
-      <span className="text-green-600">+{stats.additions}</span>
-
-      <span className="text-red-600">-{stats.deletions}</span>
-
+    <div className="flex items-center px-4 pt-3 pb-2 text-sm space-x-2">
+      <div className="flex items-center space-x-1 bg-green-100 text-green-700 px-2 py-0.5 rounded-md font-medium">
+        <span>+{stats.additions}</span>
+      </div>
+      <div className="flex items-center space-x-1 bg-red-100 text-red-700 px-2 py-0.5 rounded-md font-medium">
+        <span>-{stats.deletions}</span>
+      </div>
       <span className="text-gray-400">•</span>
-
-      <span className="text-gray-600">{files.length} 个文件被更改</span>
+      <span className="text-gray-600 font-medium">{files.length} 个文件被更改</span>
     </div>
   )
 }
 
-export const Content = ({
-  title,
-  content,
-  stats,
-  files,
-}: Pick<CommitInfo, 'title' | 'content' | 'stats' | 'files'>) => {
+interface ContentProps {
+  title: CommitInfo['title']
+  content: CommitInfo['content']
+  stats: CommitInfo['stats']
+  files: CommitInfo['files']
+}
+
+export const Content = ({ title, content, stats, files }: ContentProps) => {
   return (
-    <div className="w-full min-h-20 flex flex-col bg-pink-100 rounded-xl">
-      <div className="w-full flex items-center">
+    <div className="w-full min-h-20 flex flex-col bg-linear-to-br from-purple-50 to-pink-50 rounded-xl shadow-sm border border-purple-200/50">
+      <div className="w-full flex flex-col">
         <Title title={title} />
         <Stat stats={stats} files={files} />
       </div>
-      <Separator className="bg-gray-400" />
-      <div className="w-full px-4 py-2">
-        {content && (
-          <div className="text-gray-700 whitespace-pre-line">
-            <div dangerouslySetInnerHTML={{ __html: markdown(content) }}></div>
+      <Separator className="bg-purple-200/50" />
+      {content && (
+        <div className="w-full px-4 py-3">
+          <div className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none">
+            <div dangerouslySetInnerHTML={{ __html: markdown(content) }} />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

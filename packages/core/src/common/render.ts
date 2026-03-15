@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { segment, render, karinPathHtml, base64 } from 'node-karin'
+import { segment, render, karinPathHtml } from 'node-karin'
 import * as component from '@puniyu/component'
 import { Version } from '@/root'
 import {
@@ -17,13 +17,15 @@ import { Platform } from '@/types'
 
 const Render = {
   async render(element: ReactNode, name: string) {
-    const html = template_render(element)
     const htmlDir = path.join(karinPathHtml, Version.Plugin_Name)
-    const hash = createHash('md5').update(html).digest('hex').substring(0, 16)
-    const htmlPath = path.join(htmlDir, `${name}_${hash}.html`)
     if (!fs.existsSync(htmlDir)) {
       await fs.promises.mkdir(htmlDir, { recursive: true })
     }
+
+    const html = template_render(element)
+    const hash = createHash('md5').update(html).digest('hex').substring(0, 16)
+    const htmlPath = path.join(htmlDir, `${name}_${hash}.html`)
+
     await fs.promises.writeFile(htmlPath, html, 'utf-8')
     const img = await render.render({
       file: htmlPath,
@@ -34,19 +36,26 @@ const Render = {
         timeout: 60000,
       },
     })
-    return segment.image(img.startsWith("base64") ? img : `base64://${img}`)
+    return segment.image(img.startsWith('base64') ? img : `base64://${img}`)
   },
   async commit(platform: Platform = Platform.GitHub, options: CommitInfo) {
-    const name = 'commit'
     switch (platform) {
-      case Platform.GitHub:
+      case Platform.GitHub: {
+        const name = github.Commit.displayName.toLowerCase()
         return await Render.render(github.Commit({ ...options }), name)
-      case Platform.Gitee:
+      }
+      case Platform.Gitee: {
+        const name = gitee.Commit.displayName.toLowerCase()
         return await Render.render(gitee.Commit({ ...options }), name)
-      case Platform.GitCode:
+      }
+      case Platform.GitCode: {
+        const name = gitcode.Commit.displayName.toLowerCase()
         return await Render.render(gitcode.Commit({ ...options }), name)
-      case Platform.CnbCool:
+      }
+      case Platform.CnbCool: {
+        const name = cnbcool.Commit.displayName.toLowerCase()
         return await Render.render(cnbcool.Commit({ ...options }), name)
+      }
     }
   },
   help: component.help,

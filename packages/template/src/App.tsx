@@ -2,9 +2,6 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import { github, gitee } from '@/components/platform'
 import { commitInfo } from '@/dev'
 
-import '@/styles/global.css'
-import '@/styles/font.css'
-
 const App = () => {
   return (
     <>

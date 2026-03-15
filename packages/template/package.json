@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsdown",
+    "build": "cross-env NODE_ENV=production vite build && tsdown",
     "preview": "vite preview"
   },
   "devDependencies": {

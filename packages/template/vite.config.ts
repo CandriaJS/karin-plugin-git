@@ -14,18 +14,20 @@ export default defineConfig({
   },
   plugins: [react(), tsconfigPaths(), tailwindcss()],
   build: {
-    lib: {
-      entry: path.join(filePath, 'src', 'index.ts'),
-      name: 'index',
-      formats: ['es'],
-      fileName: 'index',
-    },
+    target: 'es2022',
     outDir: path.join(filePath, 'dist'),
     cssCodeSplit: false,
     chunkSizeWarningLimit: 1000,
+    lib: {
+      entry: path.join(filePath, 'src', 'index.ts'),
+      formats: ['es'],
+      cssFileName: 'main',
+    },
     rolldownOptions: {
       external: [...builtinModules, ...builtinModules.map((m) => `node:${m}`)],
+
       output: {
+        inlineDynamicImports: false,
         advancedChunks: {
           groups: [
             {
@@ -53,13 +55,24 @@ export default defineConfig({
                 return moduleId.includes('components/')
               },
             },
-            {
-              name: 'utils',
-              test: (moduleId) => {
-                return moduleId.includes('utils/')
-              },
-            },
           ],
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: (chunkInfo) => {
+          return chunkInfo.name === 'index'
+            ? 'index.js'
+            : 'assets/js/[name]-[hash].js'
+        },
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name || ''
+          const extType = info.split('.').pop() || 'misc'
+          if (/\.(png|jpe?g|gif|svg|webp|avif)$/i.test(info)) {
+            return 'assets/images/[name][extname]'
+          }
+          if (/\.(woff2?|eot|ttf|otf)$/i.test(info)) {
+            return 'assets/fonts/[name][extname]'
+          }
+          return `assets/${extType}/[name][extname]`
         },
       },
     },

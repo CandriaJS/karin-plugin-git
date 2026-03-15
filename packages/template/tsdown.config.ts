@@ -27,5 +27,4 @@ export default defineConfig({
   treeshake: true,
   platform: 'node',
   outDir: path.join(filePath, 'dist'),
-  loader: { '.svg': 'dataurl' },
 })
