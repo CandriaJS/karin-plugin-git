@@ -5,6 +5,7 @@ import { Version } from '@/root'
 import {
   render as template_render,
   CommitInfo,
+  ReleaseInfo,
   github,
   gitee,
   cnbcool,
@@ -55,6 +56,26 @@ const Render = {
       case Platform.CnbCool: {
         const name = cnbcool.Commit.displayName.toLowerCase()
         return await Render.render(cnbcool.Commit({ ...options }), name)
+      }
+    }
+  },
+  async release(platform: Platform = Platform.GitHub, options: ReleaseInfo) {
+    switch (platform) {
+      case Platform.GitHub: {
+        const name = github.Release.displayName.toLowerCase()
+        return await Render.render(github.Release({ ...options }), name)
+      }
+      case Platform.Gitee: {
+        const name = gitee.Release.displayName.toLowerCase()
+        return await Render.render(gitee.Release({ ...options }), name)
+      }
+      case Platform.GitCode: {
+        const name = gitcode.Release.displayName.toLowerCase()
+        return await Render.render(gitcode.Release({ ...options }), name)
+      }
+      case Platform.CnbCool: {
+        const name = cnbcool.Release.displayName.toLowerCase()
+        return await Render.render(cnbcool.Release({ ...options }), name)
       }
     }
   },

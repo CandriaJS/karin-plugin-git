@@ -34,3 +34,12 @@ export interface PushInfo {
   createAt: Date
   updateAt: Date
 }
+
+export interface ReleaseInfo {
+  id: number
+  repoId: number
+  sessionId: number
+  tagName: string
+  createAt: Date
+  updateAt: Date
+}

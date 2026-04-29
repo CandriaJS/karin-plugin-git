@@ -19,7 +19,9 @@ export default defineConfig({
   dts: {
     emitDtsOnly: true,
   },
-  inlineOnly: false,
+  deps: {
+    onlyBundle: false
+  },
   clean: false,
   minify: true,
   target: 'node22',

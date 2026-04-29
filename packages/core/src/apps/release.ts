@@ -4,10 +4,10 @@ import { ClientType, Platform } from '@/types'
 import { isEmpty } from 'es-toolkit/compat'
 import { client as Client, db } from '@/models'
 
-export const commit = karin.command(
-  /^#?(?:git(?:commit|提交信息|提交记录))\s*(\w+)(?::(?:([^/\s]+)\/([^:\s]+)))?(?::([^/\s]+))?$/i,
+export const release = karin.command(
+  /^#?(?:gitrelease|git\s*release|版本发布)\s*(\w+)(?::(?:([^/\s]+)\/([^\s:]+)))?(?::([^\s]+))?$/i,
   async (e) => {
-    let [, platform, owner, repo, sha] = e.msg.match(commit!.reg)!
+    let [, platform, owner, repo, tagName] = e.msg.match(release!.reg)!
     if (e.isGroup) {
       if (!owner || !repo) {
         const bindInfo = await db.bind.GetBind(e.groupId)
@@ -53,33 +53,33 @@ export const commit = karin.command(
     if (platform.toLowerCase() !== 'github' && isEmpty(token)) {
       return await e.reply('请先配置访问令牌')
     }
-    const commitClient = client.commit()
+
+    const releaseClient = client.release()
     try {
-      const commitInfo = await commitClient.info({ owner, repo }, sha)
-      const messageParts = commitInfo.commit.message.split('\n')
-      const commitType = {
+      const releaseInfo = await releaseClient.info({ owner, repo }, tagName || undefined)
+      const releaseData = {
         owner,
         repo,
-        sha: commitInfo.sha,
-        title: messageParts[0],
-        content: messageParts.slice(1).join('\n'),
-        stats: commitInfo.stats,
-        files: commitInfo.files,
-        author: commitInfo.commit.author,
-        committer: commitInfo.commit.committer,
-        branch: sha,
+        tagName: releaseInfo.tagName,
+        targetCommitish: releaseInfo.targetCommitish,
+        prerelease: releaseInfo.prerelease,
+        name: releaseInfo.name,
+        body: releaseInfo.body,
+        author: releaseInfo.author,
+        createdAt: releaseInfo.createdAt,
+        assets: releaseInfo.assets,
       }
-      const img = await Render.commit(platformType, commitType)
+      const img = await Render.release(platformType, releaseData)
       return await e.reply(img)
     } catch (err) {
       logger.error(
-        `获取${platform.toLowerCase()}提交信息出错: ${owner}/${repo}:${sha ? sha : ''} - ${(err as Error).message}`,
+        `获取${platform.toLowerCase()}版本发布信息出错: ${owner}/${repo}:${tagName ? tagName : ''} - ${(err as Error).message}`,
       )
-      return await e.reply('获取提交信息失败, 请重试')
+      return await e.reply('获取版本发布信息失败, 请重试')
     }
   },
   {
-    name: 'commit:info',
+    name: 'release:info',
     event: 'message',
   },
 )

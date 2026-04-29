@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime.js'
 import 'dayjs/locale/zh-cn.js'
 
-export const toRelativeTime = (date: Date) => {
+export const toRelativeTime = (date: Date | string) => {
   dayjs.extend(relativeTime)
   dayjs.locale('zh-cn')
   const now = dayjs()

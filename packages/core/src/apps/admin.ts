@@ -42,7 +42,7 @@ export const AddRepo = karin.command(
         platformName = Platform.CnbCool
         break
       default:
-        return await e.reply('未找到该平台, 请重试')
+        return await e.reply('未支持的平台，目前支持: github、gitee、gitcode、cnbcool')
     }
 
     let [repoInfo, sessionInfo] = await Promise.all([
@@ -58,36 +58,42 @@ export const AddRepo = karin.command(
       sessionInfo = await db.session.GetSession(botId, groupId)
     }
     if (!repoInfo || !sessionInfo)
-      return await e.reply('添加订阅仓库失败，请重试')
+      return await e.reply('添加订阅仓库失败，请稍后重试')
 
-    let msg = `添加订阅仓库成功, 平台: ${platformName}, 仓库: ${owner}/${repo}, 订阅类型: ${eventType.join(',')}`
-
-    const PushEvent = eventType.includes(EventType.Push)
-    if (PushEvent) {
-      const repoClient = client.repo()
-      let defaultBranch: string
-      try {
-        const repo_info = await repoClient.info({ owner, repo })
-        defaultBranch = repo_info.defaultBranch
-      } catch (e) {
-        defaultBranch = 'main'
-      }
-      const pushRepo = await db.push.GetPush(
-        repoInfo.id,
-        sessionInfo.id,
-        defaultBranch,
-      )
+    const eventLabels: string[] = []
+    const pushRepo = await db.push.GetPush(repoInfo.id, sessionInfo.id, 'main')
+    if (eventType.includes(EventType.Push)) {
       if (!pushRepo) {
+        const repoClient = client.repo()
+        let defaultBranch: string
+        try {
+          const repo_info = await repoClient.info({ owner, repo })
+          defaultBranch = repo_info.defaultBranch
+        } catch {
+          defaultBranch = 'main'
+        }
         await db.push.AddPush(repoInfo.id, sessionInfo.id, defaultBranch)
-        msg += `, 分支: ${defaultBranch}`
+        eventLabels.push(`推送订阅 (分支: ${defaultBranch})`)
       } else {
-        msg = `仓库 ${owner}/${repo} 的推送订阅已存在, 请勿重复订阅`
+        eventLabels.push('推送订阅')
       }
     }
 
-    /// TODO: 添加Release订阅
+    const releaseRepo = await db.release.GetRelease(repoInfo.id, sessionInfo.id)
+    if (eventType.includes(EventType.Release)) {
+      if (!releaseRepo) {
+        await db.release.AddRelease(repoInfo.id, sessionInfo.id, 'latest')
+        eventLabels.push('Release 订阅')
+      } else {
+        eventLabels.push('Release 订阅')
+      }
+    }
 
-    await e.reply(msg)
+    if (eventLabels.length === 0) {
+      return await e.reply('未指定订阅类型，请指定 push 或 release')
+    }
+
+    await e.reply(`订阅成功！仓库: ${owner}/${repo}，订阅类型: ${eventLabels.join('、')}`)
   },
   {
     name: 'admin:addRepo',
@@ -118,22 +124,23 @@ export const BindRepo = karin.command(
         platformName = Platform.CnbCool
         break
       default:
-        return await e.reply('未找到该平台, 请重试')
+        return await e.reply('未支持的平台，目前支持: github、gitee、gitcode、cnbcool')
     }
+
     let repoInfo = await db.repo.GetRepo(platformName, owner, repo)
     if (!repoInfo) {
       await db.repo.AddRepo(platformName, owner, repo)
       repoInfo = await db.repo.GetRepo(platformName, owner, repo)
     }
     if (!repoInfo) {
-      return await e.reply('绑定仓库失败, 请重试')
+      return await e.reply('绑定仓库失败，请稍后重试')
     }
     const BindInfo = await db.bind.GetBind(e.groupId)
     if (BindInfo) {
-      return await e.reply('该群已绑定该仓库, 请勿重复绑定')
+      return await e.reply('该群已绑定仓库，请勿重复绑定')
     }
     await db.bind.AddBind(e.groupId, repoInfo.id)
-    await e.reply(`绑定仓库成功, 平台: ${platformName}, 仓库: ${owner}/${repo}`)
+    await e.reply(`绑定仓库成功，仓库: ${owner}/${repo}`)
   },
   {
     name: 'admin:bindRepo',
@@ -142,9 +149,9 @@ export const BindRepo = karin.command(
 )
 
 export const RemoveRepo = karin.command(
-  /^#?git(?:移除|删除|remove)(?:订阅仓库|repo)(?:([a-zA-Z]+):([^/\s]+)\/([^:\s]+))$/i,
+  /^#?git(?:移除|删除|remove)(?:订阅仓库|repo)(?:([a-zA-Z]+):([^/\s]+)\/([^:\s]+))(?:\s+([^/\s]+))?$/i,
   async (e) => {
-    const [, platform, owner, repo] = e.msg.match(RemoveRepo!.reg)!
+    const [, platform, owner, repo, event] = e.msg.match(RemoveRepo!.reg)!
     let botId = e.selfId
     let groupId = e.groupId
     let platformName = Platform.GitHub
@@ -164,7 +171,7 @@ export const RemoveRepo = karin.command(
         platformName = Platform.CnbCool
         break
       default:
-        return await e.reply('未找到该平台, 请重试')
+        return await e.reply('未支持的平台，目前支持: github、gitee、gitcode、cnbcool')
     }
 
     const [repoInfo, sessionInfo] = await Promise.all([
@@ -172,11 +179,24 @@ export const RemoveRepo = karin.command(
       db.session.GetSession(botId, groupId),
     ])
     if (!repoInfo || !sessionInfo) {
-      return await e.reply('未找到该订阅仓库, 删除失败,请重试')
+      return await e.reply('未找到该订阅仓库，删除失败')
     }
-    await db.push.RemovePush(repoInfo.id, sessionInfo.id)
 
-    await e.reply(`删除订阅仓库成功`)
+    const removeLabels: string[] = []
+    if (!event || event.toLowerCase().includes('push')) {
+      await db.push.RemovePush(repoInfo.id, sessionInfo.id)
+      removeLabels.push('推送订阅')
+    }
+    if (!event || event.toLowerCase().includes('release')) {
+      await db.release.RemoveRelease(repoInfo.id, sessionInfo.id)
+      removeLabels.push('Release 订阅')
+    }
+
+    if (removeLabels.length === 0) {
+      return await e.reply('未指定订阅类型，请指定 push 或 release')
+    }
+
+    await e.reply(`删除订阅成功，已取消: ${removeLabels.join('、')}`)
   },
   {
     name: 'admin:removeRepo',
@@ -206,10 +226,10 @@ export const SetToken = karin.command(
         configKey = 'cnbcool'
         break
       default:
-        return await e.reply('未找到该平台, 请重试')
+        return await e.reply('未支持的平台，目前支持: github、gitee、gitcode、cnbcool')
     }
     Config.Modify(configKey, 'token', Token)
-    await e.reply(`设置${platform.toLowerCase()}访问令牌成功`)
+    await e.reply(`${platform.toLowerCase()} 访问令牌设置成功`)
   },
   {
     name: 'admin:SetToken',

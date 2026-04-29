@@ -10,7 +10,7 @@ const filePath = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   server: {
-    port: 33720,
+    port: 33710,
   },
   plugins: [react(), tsconfigPaths(), tailwindcss()],
   build: {
