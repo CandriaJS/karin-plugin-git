@@ -1,5 +1,34 @@
 # 变更日志
 
+## [1.6.0](https://github.com/CandriaJS/karin-plugin-git/compare/core-v1.5.0...core-v1.6.0) (2026-05-06)
+
+
+### ✨ 新功能
+
+* **core:** 新增 Release 订阅功能并重构仓库管理 ([7dc6d05](https://github.com/CandriaJS/karin-plugin-git/commit/7dc6d050cfaa794a31f3c706ae5c611486ea80b0))
+
+
+### 🎨 代码样式
+
+* 优化模板 ([68b963c](https://github.com/CandriaJS/karin-plugin-git/commit/68b963c862c6c3402147be0b307089dfae0eed4a))
+
+
+### 🔧 其他更新
+
+* 更新help组件 ([a8fa23a](https://github.com/CandriaJS/karin-plugin-git/commit/a8fa23ac44c1ac6293195999d3d4c80ba382c0d3))
+
+
+### ♻️ 代码重构
+
+* **template:** 重构模板结构并新增 Release 组件 ([7dc6d05](https://github.com/CandriaJS/karin-plugin-git/commit/7dc6d050cfaa794a31f3c706ae5c611486ea80b0))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @candriajs/template bumped to 1.6.0
+
 ## [1.5.0](https://github.com/CandriaJS/karin-plugin-git/compare/core-v1.4.0...core-v1.5.0) (2026-02-26)
 
 
