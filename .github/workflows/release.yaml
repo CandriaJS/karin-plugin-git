@@ -16,9 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       release_created: ${{ steps.release-please.outputs['packages/core--release_created'] }}
-      tag_name: ${{ steps.release-please.outputs['packages/core--tag_name'] }}
-      version: ${{ steps.release-please.outputs['packages/core--version'] }}
-      body: ${{ steps.release-please.outputs['packages/core--body'] }}
     steps:
       - name: 获取token
         uses: actions/create-github-app-token@v2
@@ -81,7 +78,7 @@ jobs:
   publish-to-npm:
     runs-on: ubuntu-latest
     needs: [release, build]
-    if: needs.release.outputs.releases_created == 'true'
+    if: needs.release.outputs.release_created == 'true'
     steps:
       - name: 导入构建产物
         uses: actions/download-artifact@v4
