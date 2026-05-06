@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { segment, render, karinPathHtml } from 'node-karin'
-import * as component from '@puniyu/component'
+import * as component from '@puniyu/lumio'
 import { Version } from '@/root'
 import {
   render as template_render,

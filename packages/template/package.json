@@ -11,26 +11,26 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.18",
-    "@types/react": "^19.2.5",
-    "@types/react-dom": "^19.2.3",
+    "@tailwindcss/vite": "^4.2.4",
     "@types/markdown-it": "^14.1.2",
     "@types/markdown-it-emoji": "^3.0.1",
-    "@vitejs/plugin-react": "^5.1.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
     "nipaw": "npm:@puniyu/nipaw@^1.9.5",
     "react-router-dom": "^7.13.0",
-    "vite": "npm:rolldown-vite@latest",
+    "vite": "^8.0.10",
     "vite-tsconfig-paths": "^6.0.5"
   },
   "dependencies": {
     "@heroui/react": "3.0.0-beta.5",
     "@heroui/styles": "3.0.0-beta.5",
+    "@mdit/plugin-tasklist": "^0.22.2",
     "dayjs": "^1.11.19",
-    "react-icons": "^5.5.0",
-    "tailwindcss": "^4.1.18",
     "markdown-it": "^14.1.0",
     "markdown-it-emoji": "^3.0.0",
-    "@mdit/plugin-tasklist": "^0.22.2"
+    "react-icons": "^5.5.0",
+    "tailwindcss": "^4.1.18"
   },
   "peerDependencies": {
     "react": "^19.2.0",

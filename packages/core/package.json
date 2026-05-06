@@ -38,17 +38,16 @@
     "watch": "cross-env EBV_FILE=\"development.env\" tsx watch --include \"src/**/*.ts\" src/app.ts"
   },
   "dependencies": {
-    "@puniyu/component": "^0.6.0",
+    "@puniyu/lumio": "^0.1.2",
     "es-toolkit": "^1.44.0",
     "nipaw": "npm:@puniyu/nipaw@^1.9.5"
   },
   "devDependencies": {
     "@candriajs/template": "workspace:*",
-    "@karinjs/plugin-puppeteer": "^1.0.21",
-    "node-karin": "^1.10.10",
+    "@karinjs/plugin-puppeteer": "^2.3.1",
     "@types/express": "^5.0.6",
     "@types/react": "^19.2.9",
-    "cross-env": "^7.0.3"
+    "node-karin": "^1.10.10"
   },
   "karin": {
     "main": "src/index.ts",

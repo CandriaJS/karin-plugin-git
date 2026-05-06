@@ -2,13 +2,13 @@ import karin, { Message, segment } from 'node-karin'
 
 import { Render } from '@/common'
 import { Version } from '@/root'
-import { HelpGroup } from '@puniyu/component'
+import { HelpGroup } from '@puniyu/lumio'
 import fs from 'node:fs'
 
 export const help = karin.command(
   /^#?(?:(git))(?:命令|帮助|菜单|help|说明|功能|指令|使用说明)$/i,
   async (e: Message) => {
-    const subscribeIcon = await fs.promises.readFile(
+    const repoIcon = await fs.promises.readFile(
       `${Version.Plugin_Path}/resources/images/repo.svg`,
     )
 
@@ -18,7 +18,7 @@ export const help = karin.command(
         { 
           name: '订阅git仓库', 
           desc: '订阅git仓库并推送, 支持github,gitee,gitcode,cnbcool', 
-          icon: subscribeIcon 
+          icon: repoIcon 
         },
       ],
     }
@@ -26,9 +26,6 @@ export const help = karin.command(
     const helpList: HelpGroup[] = [List]
 
     if (e.isMaster) {
-      const subscriptionIcon = await fs.promises.readFile(
-        `${Version.Plugin_Path}/resources/images/subscription.svg`,
-      )
       const tokenIcon = await fs.promises.readFile(
         `${Version.Plugin_Path}/resources/images/token.svg`,
       )
@@ -39,12 +36,12 @@ export const help = karin.command(
           { 
             name: '#git添加订阅仓库[platform:]owner/repo[:event]', 
             desc: '添加一个订阅仓库, event可选:push', 
-            icon: subscriptionIcon 
+            icon: repoIcon 
           },
           { 
             name: '#git删除订阅仓库[platform:]owner/repo', 
             desc: '删除一个订阅仓库', 
-            icon: subscriptionIcon 
+            icon: repoIcon 
           },
           { 
             name: '#git设置[platform]token + token', 
@@ -61,9 +58,9 @@ export const help = karin.command(
     const img = await Render.help({
       title: 'Git 帮助',
       theme: {
-        backgroundImage: bg
+        background: { type: 'Image', field0: bg }
       },
-      list: helpList,
+      groups: helpList,
     })
 
      await e.reply(segment.image(`base64://${img.toString('base64')}`))
